@@ -1,0 +1,23 @@
+﻿<Window x:Class="gudochkina_pr3.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:gudochkina_pr3"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Icon="/Resources/icon.png">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Background="#FFEC7071">
+            <Image Width="45" Height="45" HorizontalAlignment="Left" Margin="5" Source="/Resources/logo.png"/>
+            <Button x:Name="btnBack" HorizontalAlignment="Right" Content="Назад" Click="btnBack_Click"/>
+        </Grid>
+
+        <Frame x:Name="FrmMain" Grid.Row="1" NavigationUIVisibility="Hidden" ContentRendered="FrmMain_ContentRendered"/>
+
+    </Grid>
+</Window>

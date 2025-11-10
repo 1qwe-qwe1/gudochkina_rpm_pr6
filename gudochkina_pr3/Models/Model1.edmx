@@ -1,0 +1,1458 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="ClientId" />
+          </Key>
+          <Property Name="ClientId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Patronymic" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="DiscountPercent" Type="decimal" Precision="5" Scale="2" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Surname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Patronymic" Type="nvarchar" MaxLength="50" />
+          <Property Name="PostId" Type="int" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="HireDate" Type="date" Nullable="false" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="OrderItems">
+          <Key>
+            <PropertyRef Name="OrderItemId" />
+          </Key>
+          <Property Name="OrderItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="ServiceId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="UnitPrice" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderStatuses">
+          <Key>
+            <PropertyRef Name="StatusId" />
+          </Key>
+          <Property Name="StatusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Posts">
+          <Key>
+            <PropertyRef Name="PostId" />
+          </Key>
+          <Property Name="PostId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PostName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Salary" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="ProductCategories">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="Description" Type="text" />
+          <Property Name="PurchasePrice" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="SellingPrice" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="StockQuantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductSales">
+          <Key>
+            <PropertyRef Name="SaleId" />
+          </Key>
+          <Property Name="SaleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientId" Type="int" />
+          <Property Name="EmployeeId" Type="int" Nullable="false" />
+          <Property Name="SaleDateTime" Type="datetime2" Precision="7" />
+          <Property Name="TotalAmount" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RecyclingActs">
+          <Key>
+            <PropertyRef Name="ActId" />
+          </Key>
+          <Property Name="ActId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContractId" Type="int" Nullable="false" />
+          <Property Name="ActDate" Type="date" Nullable="false" />
+          <Property Name="WasteTypeId" Type="int" Nullable="false" />
+          <Property Name="Volume" Type="decimal" Precision="10" Scale="3" Nullable="false" />
+          <Property Name="Cost" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Notes" Type="text" />
+        </EntityType>
+        <EntityType Name="RecyclingCompanies">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+          </Key>
+          <Property Name="CompanyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="LicenseNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="RecyclingContracts">
+          <Key>
+            <PropertyRef Name="ContractId" />
+          </Key>
+          <Property Name="ContractId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="int" Nullable="false" />
+          <Property Name="ContractNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="StartDate" Type="date" Nullable="false" />
+          <Property Name="EndDate" Type="date" Nullable="false" />
+          <Property Name="ContractAmount" Type="decimal" Precision="12" Scale="2" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SaleItems">
+          <Key>
+            <PropertyRef Name="SaleItemId" />
+          </Key>
+          <Property Name="SaleItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SaleId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="UnitPrice" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ServiceCategories">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ServiceOrders">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientId" Type="int" Nullable="false" />
+          <Property Name="EmployeeCompletedId" Type="int" />
+          <Property Name="StatusId" Type="int" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="datetime2" Precision="7" />
+          <Property Name="DeadlineDate" Type="date" />
+          <Property Name="CompletedDateTime" Type="datetime2" Precision="7" />
+          <Property Name="TotalAmount" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Notes" Type="text" />
+          <Property Name="RecyclingActId" Type="int" />
+        </EntityType>
+        <EntityType Name="Services">
+          <Key>
+            <PropertyRef Name="ServiceId" />
+          </Key>
+          <Property Name="ServiceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="ServiceName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Description" Type="text" />
+          <Property Name="Cost" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Suppliers">
+          <Key>
+            <PropertyRef Name="SupplierId" />
+          </Key>
+          <Property Name="SupplierId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Supplies">
+          <Key>
+            <PropertyRef Name="SupplyId" />
+          </Key>
+          <Property Name="SupplyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SupplierId" Type="int" Nullable="false" />
+          <Property Name="SupplyDate" Type="datetime2" Precision="7" />
+          <Property Name="TotalAmount" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="SupplyItems">
+          <Key>
+            <PropertyRef Name="SupplyItemId" />
+          </Key>
+          <Property Name="SupplyItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SupplyId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="UnitPrice" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="RegistrationDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="WasteTypes">
+          <Key>
+            <PropertyRef Name="WasteTypeId" />
+          </Key>
+          <Property Name="WasteTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WasteTypeName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Description" Type="text" />
+        </EntityType>
+        <Association Name="FK__OrderItem__Order__6754599E">
+          <End Role="ServiceOrders" Type="Self.ServiceOrders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceOrders">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderItem__Servi__68487DD7">
+          <End Role="Services" Type="Self.Services" Multiplicity="1" />
+          <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Services">
+              <PropertyRef Name="ServiceId" />
+            </Principal>
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__Catego__4F7CD00D">
+          <End Role="ProductCategories" Type="Self.ProductCategories" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductCategories">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductSa__Clien__5CD6CB2B">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="0..1" />
+          <End Role="ProductSales" Type="Self.ProductSales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="ProductSales">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductSa__Emplo__5DCAEF64">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="ProductSales" Type="Self.ProductSales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="ProductSales">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recycling__Compa__52593CB8">
+          <End Role="RecyclingCompanies" Type="Self.RecyclingCompanies" Multiplicity="1" />
+          <End Role="RecyclingContracts" Type="Self.RecyclingContracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RecyclingCompanies">
+              <PropertyRef Name="CompanyId" />
+            </Principal>
+            <Dependent Role="RecyclingContracts">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recycling__Contr__72C60C4A">
+          <End Role="RecyclingContracts" Type="Self.RecyclingContracts" Multiplicity="1" />
+          <End Role="RecyclingActs" Type="Self.RecyclingActs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RecyclingContracts">
+              <PropertyRef Name="ContractId" />
+            </Principal>
+            <Dependent Role="RecyclingActs">
+              <PropertyRef Name="ContractId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recycling__Waste__73BA3083">
+          <End Role="WasteTypes" Type="Self.WasteTypes" Multiplicity="1" />
+          <End Role="RecyclingActs" Type="Self.RecyclingActs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WasteTypes">
+              <PropertyRef Name="WasteTypeId" />
+            </Principal>
+            <Dependent Role="RecyclingActs">
+              <PropertyRef Name="WasteTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SaleItems__Produ__6C190EBB">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="SaleItems" Type="Self.SaleItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="SaleItems">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SaleItems__SaleI__6B24EA82">
+          <End Role="ProductSales" Type="Self.ProductSales" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SaleItems" Type="Self.SaleItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductSales">
+              <PropertyRef Name="SaleId" />
+            </Principal>
+            <Dependent Role="SaleItems">
+              <PropertyRef Name="SaleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ServiceOr__Clien__5629CD9C">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="1" />
+          <End Role="ServiceOrders" Type="Self.ServiceOrders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="ServiceOrders">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ServiceOr__Emplo__5812160E">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="ServiceOrders" Type="Self.ServiceOrders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="ServiceOrders">
+              <PropertyRef Name="EmployeeCompletedId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ServiceOr__Statu__59063A47">
+          <End Role="OrderStatuses" Type="Self.OrderStatuses" Multiplicity="1" />
+          <End Role="ServiceOrders" Type="Self.ServiceOrders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderStatuses">
+              <PropertyRef Name="StatusId" />
+            </Principal>
+            <Dependent Role="ServiceOrders">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Services__Catego__4BAC3F29">
+          <End Role="ServiceCategories" Type="Self.ServiceCategories" Multiplicity="1" />
+          <End Role="Services" Type="Self.Services" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceCategories">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Services">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Supplies__Suppli__6383C8BA">
+          <End Role="Suppliers" Type="Self.Suppliers" Multiplicity="1" />
+          <End Role="Supplies" Type="Self.Supplies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Suppliers">
+              <PropertyRef Name="SupplierId" />
+            </Principal>
+            <Dependent Role="Supplies">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SupplyIte__Produ__6FE99F9F">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="SupplyItems" Type="Self.SupplyItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="SupplyItems">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SupplyIte__Suppl__6EF57B66">
+          <End Role="Supplies" Type="Self.Supplies" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SupplyItems" Type="Self.SupplyItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplies">
+              <PropertyRef Name="SupplyId" />
+            </Principal>
+            <Dependent Role="SupplyItems">
+              <PropertyRef Name="SupplyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Posts">
+          <End Role="Posts" Type="Self.Posts" Multiplicity="1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Posts">
+              <PropertyRef Name="PostId" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServiceOrders_RecyclingActs">
+          <End Role="RecyclingActs" Type="Self.RecyclingActs" Multiplicity="0..1" />
+          <End Role="ServiceOrders" Type="Self.ServiceOrders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RecyclingActs">
+              <PropertyRef Name="ActId" />
+            </Principal>
+            <Dependent Role="ServiceOrders">
+              <PropertyRef Name="RecyclingActId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ModelContainer">
+          <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderItems" EntityType="Self.OrderItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderStatuses" EntityType="Self.OrderStatuses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Posts" EntityType="Self.Posts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductCategories" EntityType="Self.ProductCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductSales" EntityType="Self.ProductSales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RecyclingActs" EntityType="Self.RecyclingActs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RecyclingCompanies" EntityType="Self.RecyclingCompanies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RecyclingContracts" EntityType="Self.RecyclingContracts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SaleItems" EntityType="Self.SaleItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ServiceCategories" EntityType="Self.ServiceCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ServiceOrders" EntityType="Self.ServiceOrders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Services" EntityType="Self.Services" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Suppliers" EntityType="Self.Suppliers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Supplies" EntityType="Self.Supplies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SupplyItems" EntityType="Self.SupplyItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WasteTypes" EntityType="Self.WasteTypes" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__OrderItem__Order__6754599E" Association="Self.FK__OrderItem__Order__6754599E">
+            <End Role="ServiceOrders" EntitySet="ServiceOrders" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderItem__Servi__68487DD7" Association="Self.FK__OrderItem__Servi__68487DD7">
+            <End Role="Services" EntitySet="Services" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__Catego__4F7CD00D" Association="Self.FK__Products__Catego__4F7CD00D">
+            <End Role="ProductCategories" EntitySet="ProductCategories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductSa__Clien__5CD6CB2B" Association="Self.FK__ProductSa__Clien__5CD6CB2B">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="ProductSales" EntitySet="ProductSales" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductSa__Emplo__5DCAEF64" Association="Self.FK__ProductSa__Emplo__5DCAEF64">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="ProductSales" EntitySet="ProductSales" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recycling__Compa__52593CB8" Association="Self.FK__Recycling__Compa__52593CB8">
+            <End Role="RecyclingCompanies" EntitySet="RecyclingCompanies" />
+            <End Role="RecyclingContracts" EntitySet="RecyclingContracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recycling__Contr__72C60C4A" Association="Self.FK__Recycling__Contr__72C60C4A">
+            <End Role="RecyclingContracts" EntitySet="RecyclingContracts" />
+            <End Role="RecyclingActs" EntitySet="RecyclingActs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recycling__Waste__73BA3083" Association="Self.FK__Recycling__Waste__73BA3083">
+            <End Role="WasteTypes" EntitySet="WasteTypes" />
+            <End Role="RecyclingActs" EntitySet="RecyclingActs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SaleItems__Produ__6C190EBB" Association="Self.FK__SaleItems__Produ__6C190EBB">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="SaleItems" EntitySet="SaleItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SaleItems__SaleI__6B24EA82" Association="Self.FK__SaleItems__SaleI__6B24EA82">
+            <End Role="ProductSales" EntitySet="ProductSales" />
+            <End Role="SaleItems" EntitySet="SaleItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ServiceOr__Clien__5629CD9C" Association="Self.FK__ServiceOr__Clien__5629CD9C">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="ServiceOrders" EntitySet="ServiceOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ServiceOr__Emplo__5812160E" Association="Self.FK__ServiceOr__Emplo__5812160E">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="ServiceOrders" EntitySet="ServiceOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ServiceOr__Statu__59063A47" Association="Self.FK__ServiceOr__Statu__59063A47">
+            <End Role="OrderStatuses" EntitySet="OrderStatuses" />
+            <End Role="ServiceOrders" EntitySet="ServiceOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Services__Catego__4BAC3F29" Association="Self.FK__Services__Catego__4BAC3F29">
+            <End Role="ServiceCategories" EntitySet="ServiceCategories" />
+            <End Role="Services" EntitySet="Services" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Supplies__Suppli__6383C8BA" Association="Self.FK__Supplies__Suppli__6383C8BA">
+            <End Role="Suppliers" EntitySet="Suppliers" />
+            <End Role="Supplies" EntitySet="Supplies" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SupplyIte__Produ__6FE99F9F" Association="Self.FK__SupplyIte__Produ__6FE99F9F">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="SupplyItems" EntitySet="SupplyItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SupplyIte__Suppl__6EF57B66" Association="Self.FK__SupplyIte__Suppl__6EF57B66">
+            <End Role="Supplies" EntitySet="Supplies" />
+            <End Role="SupplyItems" EntitySet="SupplyItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Posts" Association="Self.FK_Employees_Posts">
+            <End Role="Posts" EntitySet="Posts" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServiceOrders_RecyclingActs" Association="Self.FK_ServiceOrders_RecyclingActs">
+            <End Role="RecyclingActs" EntitySet="RecyclingActs" />
+            <End Role="ServiceOrders" EntitySet="ServiceOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Roles" Association="Self.FK_Users_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="ClientId" />
+          </Key>
+          <Property Name="ClientId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DiscountPercent" Type="Decimal" Precision="5" Scale="2" />
+          <NavigationProperty Name="ProductSales" Relationship="Self.FK__ProductSa__Clien__5CD6CB2B" FromRole="Clients" ToRole="ProductSales" />
+          <NavigationProperty Name="ServiceOrders" Relationship="Self.FK__ServiceOr__Clien__5629CD9C" FromRole="Clients" ToRole="ServiceOrders" />
+        </EntityType>
+        <EntityType Name="Employees">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PostId" Type="Int32" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HireDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="IsActive" Type="Boolean" />
+          <NavigationProperty Name="ProductSales" Relationship="Self.FK__ProductSa__Emplo__5DCAEF64" FromRole="Employees" ToRole="ProductSales" />
+          <NavigationProperty Name="ServiceOrders" Relationship="Self.FK__ServiceOr__Emplo__5812160E" FromRole="Employees" ToRole="ServiceOrders" />
+          <NavigationProperty Name="Posts" Relationship="Self.FK_Employees_Posts" FromRole="Employees" ToRole="Posts" />
+        </EntityType>
+        <EntityType Name="OrderItems">
+          <Key>
+            <PropertyRef Name="OrderItemId" />
+          </Key>
+          <Property Name="OrderItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="ServiceId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="ServiceOrders" Relationship="Self.FK__OrderItem__Order__6754599E" FromRole="OrderItems" ToRole="ServiceOrders" />
+          <NavigationProperty Name="Services" Relationship="Self.FK__OrderItem__Servi__68487DD7" FromRole="OrderItems" ToRole="Services" />
+        </EntityType>
+        <EntityType Name="OrderStatuses">
+          <Key>
+            <PropertyRef Name="StatusId" />
+          </Key>
+          <Property Name="StatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="ServiceOrders" Relationship="Self.FK__ServiceOr__Statu__59063A47" FromRole="OrderStatuses" ToRole="ServiceOrders" />
+        </EntityType>
+        <EntityType Name="Posts">
+          <Key>
+            <PropertyRef Name="PostId" />
+          </Key>
+          <Property Name="PostId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PostName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Salary" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK_Employees_Posts" FromRole="Posts" ToRole="Employees" />
+        </EntityType>
+        <EntityType Name="ProductCategories">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__Products__Catego__4F7CD00D" FromRole="ProductCategories" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PurchasePrice" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="SellingPrice" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="StockQuantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ProductCategories" Relationship="Self.FK__Products__Catego__4F7CD00D" FromRole="Products" ToRole="ProductCategories" />
+          <NavigationProperty Name="SaleItems" Relationship="Self.FK__SaleItems__Produ__6C190EBB" FromRole="Products" ToRole="SaleItems" />
+          <NavigationProperty Name="SupplyItems" Relationship="Self.FK__SupplyIte__Produ__6FE99F9F" FromRole="Products" ToRole="SupplyItems" />
+        </EntityType>
+        <EntityType Name="ProductSales">
+          <Key>
+            <PropertyRef Name="SaleId" />
+          </Key>
+          <Property Name="SaleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientId" Type="Int32" />
+          <Property Name="EmployeeId" Type="Int32" Nullable="false" />
+          <Property Name="SaleDateTime" Type="DateTime" Precision="7" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Clients" Relationship="Self.FK__ProductSa__Clien__5CD6CB2B" FromRole="ProductSales" ToRole="Clients" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK__ProductSa__Emplo__5DCAEF64" FromRole="ProductSales" ToRole="Employees" />
+          <NavigationProperty Name="SaleItems" Relationship="Self.FK__SaleItems__SaleI__6B24EA82" FromRole="ProductSales" ToRole="SaleItems" />
+        </EntityType>
+        <EntityType Name="RecyclingActs">
+          <Key>
+            <PropertyRef Name="ActId" />
+          </Key>
+          <Property Name="ActId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContractId" Type="Int32" Nullable="false" />
+          <Property Name="ActDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="WasteTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Volume" Type="Decimal" Precision="10" Scale="3" Nullable="false" />
+          <Property Name="Cost" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="RecyclingContracts" Relationship="Self.FK__Recycling__Contr__72C60C4A" FromRole="RecyclingActs" ToRole="RecyclingContracts" />
+          <NavigationProperty Name="WasteTypes" Relationship="Self.FK__Recycling__Waste__73BA3083" FromRole="RecyclingActs" ToRole="WasteTypes" />
+          <NavigationProperty Name="ServiceOrders" Relationship="Self.FK_ServiceOrders_RecyclingActs" FromRole="RecyclingActs" ToRole="ServiceOrders" />
+        </EntityType>
+        <EntityType Name="RecyclingCompanies">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+          </Key>
+          <Property Name="CompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LicenseNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="RecyclingContracts" Relationship="Self.FK__Recycling__Compa__52593CB8" FromRole="RecyclingCompanies" ToRole="RecyclingContracts" />
+        </EntityType>
+        <EntityType Name="RecyclingContracts">
+          <Key>
+            <PropertyRef Name="ContractId" />
+          </Key>
+          <Property Name="ContractId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="ContractNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ContractAmount" Type="Decimal" Precision="12" Scale="2" />
+          <NavigationProperty Name="RecyclingActs" Relationship="Self.FK__Recycling__Contr__72C60C4A" FromRole="RecyclingContracts" ToRole="RecyclingActs" />
+          <NavigationProperty Name="RecyclingCompanies" Relationship="Self.FK__Recycling__Compa__52593CB8" FromRole="RecyclingContracts" ToRole="RecyclingCompanies" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Users_Roles" FromRole="Roles" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="SaleItems">
+          <Key>
+            <PropertyRef Name="SaleItemId" />
+          </Key>
+          <Property Name="SaleItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SaleId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__SaleItems__Produ__6C190EBB" FromRole="SaleItems" ToRole="Products" />
+          <NavigationProperty Name="ProductSales" Relationship="Self.FK__SaleItems__SaleI__6B24EA82" FromRole="SaleItems" ToRole="ProductSales" />
+        </EntityType>
+        <EntityType Name="ServiceCategories">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Services" Relationship="Self.FK__Services__Catego__4BAC3F29" FromRole="ServiceCategories" ToRole="Services" />
+        </EntityType>
+        <EntityType Name="ServiceOrders">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientId" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeCompletedId" Type="Int32" />
+          <Property Name="StatusId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedDateTime" Type="DateTime" Precision="7" />
+          <Property Name="DeadlineDate" Type="DateTime" Precision="0" />
+          <Property Name="CompletedDateTime" Type="DateTime" Precision="7" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="RecyclingActId" Type="Int32" />
+          <NavigationProperty Name="Clients" Relationship="Self.FK__ServiceOr__Clien__5629CD9C" FromRole="ServiceOrders" ToRole="Clients" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK__ServiceOr__Emplo__5812160E" FromRole="ServiceOrders" ToRole="Employees" />
+          <NavigationProperty Name="OrderItems" Relationship="Self.FK__OrderItem__Order__6754599E" FromRole="ServiceOrders" ToRole="OrderItems" />
+          <NavigationProperty Name="OrderStatuses" Relationship="Self.FK__ServiceOr__Statu__59063A47" FromRole="ServiceOrders" ToRole="OrderStatuses" />
+          <NavigationProperty Name="RecyclingActs" Relationship="Self.FK_ServiceOrders_RecyclingActs" FromRole="ServiceOrders" ToRole="RecyclingActs" />
+        </EntityType>
+        <EntityType Name="Services">
+          <Key>
+            <PropertyRef Name="ServiceId" />
+          </Key>
+          <Property Name="ServiceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="ServiceName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Cost" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="OrderItems" Relationship="Self.FK__OrderItem__Servi__68487DD7" FromRole="Services" ToRole="OrderItems" />
+          <NavigationProperty Name="ServiceCategories" Relationship="Self.FK__Services__Catego__4BAC3F29" FromRole="Services" ToRole="ServiceCategories" />
+        </EntityType>
+        <EntityType Name="Suppliers">
+          <Key>
+            <PropertyRef Name="SupplierId" />
+          </Key>
+          <Property Name="SupplierId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Supplies" Relationship="Self.FK__Supplies__Suppli__6383C8BA" FromRole="Suppliers" ToRole="Supplies" />
+        </EntityType>
+        <EntityType Name="Supplies">
+          <Key>
+            <PropertyRef Name="SupplyId" />
+          </Key>
+          <Property Name="SupplyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierId" Type="Int32" Nullable="false" />
+          <Property Name="SupplyDate" Type="DateTime" Precision="7" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Suppliers" Relationship="Self.FK__Supplies__Suppli__6383C8BA" FromRole="Supplies" ToRole="Suppliers" />
+          <NavigationProperty Name="SupplyItems" Relationship="Self.FK__SupplyIte__Suppl__6EF57B66" FromRole="Supplies" ToRole="SupplyItems" />
+        </EntityType>
+        <EntityType Name="SupplyItems">
+          <Key>
+            <PropertyRef Name="SupplyItemId" />
+          </Key>
+          <Property Name="SupplyItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplyId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__SupplyIte__Produ__6FE99F9F" FromRole="SupplyItems" ToRole="Products" />
+          <NavigationProperty Name="Supplies" Relationship="Self.FK__SupplyIte__Suppl__6EF57B66" FromRole="SupplyItems" ToRole="Supplies" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="RegistrationDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="IsActive" Type="Boolean" />
+          <NavigationProperty Name="Roles" Relationship="Self.FK_Users_Roles" FromRole="Users" ToRole="Roles" />
+        </EntityType>
+        <EntityType Name="WasteTypes">
+          <Key>
+            <PropertyRef Name="WasteTypeId" />
+          </Key>
+          <Property Name="WasteTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WasteTypeName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="RecyclingActs" Relationship="Self.FK__Recycling__Waste__73BA3083" FromRole="WasteTypes" ToRole="RecyclingActs" />
+        </EntityType>
+        <Association Name="FK__ProductSa__Clien__5CD6CB2B">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="0..1" />
+          <End Role="ProductSales" Type="Self.ProductSales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="ProductSales">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ServiceOr__Clien__5629CD9C">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="1" />
+          <End Role="ServiceOrders" Type="Self.ServiceOrders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="ClientId" />
+            </Principal>
+            <Dependent Role="ServiceOrders">
+              <PropertyRef Name="ClientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ProductSa__Emplo__5DCAEF64">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="1" />
+          <End Role="ProductSales" Type="Self.ProductSales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="ProductSales">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ServiceOr__Emplo__5812160E">
+          <End Role="Employees" Type="Self.Employees" Multiplicity="0..1" />
+          <End Role="ServiceOrders" Type="Self.ServiceOrders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employees">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="ServiceOrders">
+              <PropertyRef Name="EmployeeCompletedId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Posts">
+          <End Role="Posts" Type="Self.Posts" Multiplicity="1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Posts">
+              <PropertyRef Name="PostId" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderItem__Order__6754599E">
+          <End Role="ServiceOrders" Type="Self.ServiceOrders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceOrders">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderItem__Servi__68487DD7">
+          <End Role="Services" Type="Self.Services" Multiplicity="1" />
+          <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Services">
+              <PropertyRef Name="ServiceId" />
+            </Principal>
+            <Dependent Role="OrderItems">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ServiceOr__Statu__59063A47">
+          <End Role="OrderStatuses" Type="Self.OrderStatuses" Multiplicity="1" />
+          <End Role="ServiceOrders" Type="Self.ServiceOrders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderStatuses">
+              <PropertyRef Name="StatusId" />
+            </Principal>
+            <Dependent Role="ServiceOrders">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Products__Catego__4F7CD00D">
+          <End Role="ProductCategories" Type="Self.ProductCategories" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductCategories">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SaleItems__Produ__6C190EBB">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="SaleItems" Type="Self.SaleItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="SaleItems">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SupplyIte__Produ__6FE99F9F">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="SupplyItems" Type="Self.SupplyItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="SupplyItems">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SaleItems__SaleI__6B24EA82">
+          <End Role="ProductSales" Type="Self.ProductSales" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SaleItems" Type="Self.SaleItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductSales">
+              <PropertyRef Name="SaleId" />
+            </Principal>
+            <Dependent Role="SaleItems">
+              <PropertyRef Name="SaleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recycling__Contr__72C60C4A">
+          <End Role="RecyclingContracts" Type="Self.RecyclingContracts" Multiplicity="1" />
+          <End Role="RecyclingActs" Type="Self.RecyclingActs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RecyclingContracts">
+              <PropertyRef Name="ContractId" />
+            </Principal>
+            <Dependent Role="RecyclingActs">
+              <PropertyRef Name="ContractId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recycling__Waste__73BA3083">
+          <End Role="WasteTypes" Type="Self.WasteTypes" Multiplicity="1" />
+          <End Role="RecyclingActs" Type="Self.RecyclingActs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WasteTypes">
+              <PropertyRef Name="WasteTypeId" />
+            </Principal>
+            <Dependent Role="RecyclingActs">
+              <PropertyRef Name="WasteTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ServiceOrders_RecyclingActs">
+          <End Role="RecyclingActs" Type="Self.RecyclingActs" Multiplicity="0..1" />
+          <End Role="ServiceOrders" Type="Self.ServiceOrders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RecyclingActs">
+              <PropertyRef Name="ActId" />
+            </Principal>
+            <Dependent Role="ServiceOrders">
+              <PropertyRef Name="RecyclingActId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Recycling__Compa__52593CB8">
+          <End Role="RecyclingCompanies" Type="Self.RecyclingCompanies" Multiplicity="1" />
+          <End Role="RecyclingContracts" Type="Self.RecyclingContracts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RecyclingCompanies">
+              <PropertyRef Name="CompanyId" />
+            </Principal>
+            <Dependent Role="RecyclingContracts">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Services__Catego__4BAC3F29">
+          <End Role="ServiceCategories" Type="Self.ServiceCategories" Multiplicity="1" />
+          <End Role="Services" Type="Self.Services" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ServiceCategories">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Services">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Supplies__Suppli__6383C8BA">
+          <End Role="Suppliers" Type="Self.Suppliers" Multiplicity="1" />
+          <End Role="Supplies" Type="Self.Supplies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Suppliers">
+              <PropertyRef Name="SupplierId" />
+            </Principal>
+            <Dependent Role="Supplies">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SupplyIte__Suppl__6EF57B66">
+          <End Role="Supplies" Type="Self.Supplies" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SupplyItems" Type="Self.SupplyItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplies">
+              <PropertyRef Name="SupplyId" />
+            </Principal>
+            <Dependent Role="SupplyItems">
+              <PropertyRef Name="SupplyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Clients" EntityType="Self.Clients" />
+          <EntitySet Name="Employees" EntityType="Self.Employees" />
+          <EntitySet Name="OrderItems" EntityType="Self.OrderItems" />
+          <EntitySet Name="OrderStatuses" EntityType="Self.OrderStatuses" />
+          <EntitySet Name="Posts" EntityType="Self.Posts" />
+          <EntitySet Name="ProductCategories" EntityType="Self.ProductCategories" />
+          <EntitySet Name="Products" EntityType="Self.Products" />
+          <EntitySet Name="ProductSales" EntityType="Self.ProductSales" />
+          <EntitySet Name="RecyclingActs" EntityType="Self.RecyclingActs" />
+          <EntitySet Name="RecyclingCompanies" EntityType="Self.RecyclingCompanies" />
+          <EntitySet Name="RecyclingContracts" EntityType="Self.RecyclingContracts" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" />
+          <EntitySet Name="SaleItems" EntityType="Self.SaleItems" />
+          <EntitySet Name="ServiceCategories" EntityType="Self.ServiceCategories" />
+          <EntitySet Name="ServiceOrders" EntityType="Self.ServiceOrders" />
+          <EntitySet Name="Services" EntityType="Self.Services" />
+          <EntitySet Name="Suppliers" EntityType="Self.Suppliers" />
+          <EntitySet Name="Supplies" EntityType="Self.Supplies" />
+          <EntitySet Name="SupplyItems" EntityType="Self.SupplyItems" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <EntitySet Name="WasteTypes" EntityType="Self.WasteTypes" />
+          <AssociationSet Name="FK__ProductSa__Clien__5CD6CB2B" Association="Self.FK__ProductSa__Clien__5CD6CB2B">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="ProductSales" EntitySet="ProductSales" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ServiceOr__Clien__5629CD9C" Association="Self.FK__ServiceOr__Clien__5629CD9C">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="ServiceOrders" EntitySet="ServiceOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ProductSa__Emplo__5DCAEF64" Association="Self.FK__ProductSa__Emplo__5DCAEF64">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="ProductSales" EntitySet="ProductSales" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ServiceOr__Emplo__5812160E" Association="Self.FK__ServiceOr__Emplo__5812160E">
+            <End Role="Employees" EntitySet="Employees" />
+            <End Role="ServiceOrders" EntitySet="ServiceOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Posts" Association="Self.FK_Employees_Posts">
+            <End Role="Posts" EntitySet="Posts" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderItem__Order__6754599E" Association="Self.FK__OrderItem__Order__6754599E">
+            <End Role="ServiceOrders" EntitySet="ServiceOrders" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderItem__Servi__68487DD7" Association="Self.FK__OrderItem__Servi__68487DD7">
+            <End Role="Services" EntitySet="Services" />
+            <End Role="OrderItems" EntitySet="OrderItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ServiceOr__Statu__59063A47" Association="Self.FK__ServiceOr__Statu__59063A47">
+            <End Role="OrderStatuses" EntitySet="OrderStatuses" />
+            <End Role="ServiceOrders" EntitySet="ServiceOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Products__Catego__4F7CD00D" Association="Self.FK__Products__Catego__4F7CD00D">
+            <End Role="ProductCategories" EntitySet="ProductCategories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SaleItems__Produ__6C190EBB" Association="Self.FK__SaleItems__Produ__6C190EBB">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="SaleItems" EntitySet="SaleItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SupplyIte__Produ__6FE99F9F" Association="Self.FK__SupplyIte__Produ__6FE99F9F">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="SupplyItems" EntitySet="SupplyItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SaleItems__SaleI__6B24EA82" Association="Self.FK__SaleItems__SaleI__6B24EA82">
+            <End Role="ProductSales" EntitySet="ProductSales" />
+            <End Role="SaleItems" EntitySet="SaleItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recycling__Contr__72C60C4A" Association="Self.FK__Recycling__Contr__72C60C4A">
+            <End Role="RecyclingContracts" EntitySet="RecyclingContracts" />
+            <End Role="RecyclingActs" EntitySet="RecyclingActs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recycling__Waste__73BA3083" Association="Self.FK__Recycling__Waste__73BA3083">
+            <End Role="WasteTypes" EntitySet="WasteTypes" />
+            <End Role="RecyclingActs" EntitySet="RecyclingActs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ServiceOrders_RecyclingActs" Association="Self.FK_ServiceOrders_RecyclingActs">
+            <End Role="RecyclingActs" EntitySet="RecyclingActs" />
+            <End Role="ServiceOrders" EntitySet="ServiceOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Recycling__Compa__52593CB8" Association="Self.FK__Recycling__Compa__52593CB8">
+            <End Role="RecyclingCompanies" EntitySet="RecyclingCompanies" />
+            <End Role="RecyclingContracts" EntitySet="RecyclingContracts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Roles" Association="Self.FK_Users_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Services__Catego__4BAC3F29" Association="Self.FK__Services__Catego__4BAC3F29">
+            <End Role="ServiceCategories" EntitySet="ServiceCategories" />
+            <End Role="Services" EntitySet="Services" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Supplies__Suppli__6383C8BA" Association="Self.FK__Supplies__Suppli__6383C8BA">
+            <End Role="Suppliers" EntitySet="Suppliers" />
+            <End Role="Supplies" EntitySet="Supplies" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SupplyIte__Suppl__6EF57B66" Association="Self.FK__SupplyIte__Suppl__6EF57B66">
+            <End Role="Supplies" EntitySet="Supplies" />
+            <End Role="SupplyItems" EntitySet="SupplyItems" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ModelContainer" CdmEntityContainer="Entities1">
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="Model.Clients">
+              <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DiscountPercent" ColumnName="DiscountPercent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="Model.Employees">
+              <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="HireDate" ColumnName="HireDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderItems">
+            <EntityTypeMapping TypeName="Model.OrderItems">
+              <MappingFragment StoreEntitySet="OrderItems">
+                <ScalarProperty Name="OrderItemId" ColumnName="OrderItemId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderStatuses">
+            <EntityTypeMapping TypeName="Model.OrderStatuses">
+              <MappingFragment StoreEntitySet="OrderStatuses">
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Posts">
+            <EntityTypeMapping TypeName="Model.Posts">
+              <MappingFragment StoreEntitySet="Posts">
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
+                <ScalarProperty Name="PostName" ColumnName="PostName" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductCategories">
+            <EntityTypeMapping TypeName="Model.ProductCategories">
+              <MappingFragment StoreEntitySet="ProductCategories">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="Model.Products">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
+                <ScalarProperty Name="SellingPrice" ColumnName="SellingPrice" />
+                <ScalarProperty Name="StockQuantity" ColumnName="StockQuantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductSales">
+            <EntityTypeMapping TypeName="Model.ProductSales">
+              <MappingFragment StoreEntitySet="ProductSales">
+                <ScalarProperty Name="SaleId" ColumnName="SaleId" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="SaleDateTime" ColumnName="SaleDateTime" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RecyclingActs">
+            <EntityTypeMapping TypeName="Model.RecyclingActs">
+              <MappingFragment StoreEntitySet="RecyclingActs">
+                <ScalarProperty Name="ActId" ColumnName="ActId" />
+                <ScalarProperty Name="ContractId" ColumnName="ContractId" />
+                <ScalarProperty Name="ActDate" ColumnName="ActDate" />
+                <ScalarProperty Name="WasteTypeId" ColumnName="WasteTypeId" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RecyclingCompanies">
+            <EntityTypeMapping TypeName="Model.RecyclingCompanies">
+              <MappingFragment StoreEntitySet="RecyclingCompanies">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="LicenseNumber" ColumnName="LicenseNumber" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RecyclingContracts">
+            <EntityTypeMapping TypeName="Model.RecyclingContracts">
+              <MappingFragment StoreEntitySet="RecyclingContracts">
+                <ScalarProperty Name="ContractId" ColumnName="ContractId" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="ContractNumber" ColumnName="ContractNumber" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="ContractAmount" ColumnName="ContractAmount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="Model.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SaleItems">
+            <EntityTypeMapping TypeName="Model.SaleItems">
+              <MappingFragment StoreEntitySet="SaleItems">
+                <ScalarProperty Name="SaleItemId" ColumnName="SaleItemId" />
+                <ScalarProperty Name="SaleId" ColumnName="SaleId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ServiceCategories">
+            <EntityTypeMapping TypeName="Model.ServiceCategories">
+              <MappingFragment StoreEntitySet="ServiceCategories">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ServiceOrders">
+            <EntityTypeMapping TypeName="Model.ServiceOrders">
+              <MappingFragment StoreEntitySet="ServiceOrders">
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+                <ScalarProperty Name="EmployeeCompletedId" ColumnName="EmployeeCompletedId" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="CreatedDateTime" ColumnName="CreatedDateTime" />
+                <ScalarProperty Name="DeadlineDate" ColumnName="DeadlineDate" />
+                <ScalarProperty Name="CompletedDateTime" ColumnName="CompletedDateTime" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="RecyclingActId" ColumnName="RecyclingActId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Services">
+            <EntityTypeMapping TypeName="Model.Services">
+              <MappingFragment StoreEntitySet="Services">
+                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="ServiceName" ColumnName="ServiceName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Suppliers">
+            <EntityTypeMapping TypeName="Model.Suppliers">
+              <MappingFragment StoreEntitySet="Suppliers">
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Supplies">
+            <EntityTypeMapping TypeName="Model.Supplies">
+              <MappingFragment StoreEntitySet="Supplies">
+                <ScalarProperty Name="SupplyId" ColumnName="SupplyId" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+                <ScalarProperty Name="SupplyDate" ColumnName="SupplyDate" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SupplyItems">
+            <EntityTypeMapping TypeName="Model.SupplyItems">
+              <MappingFragment StoreEntitySet="SupplyItems">
+                <ScalarProperty Name="SupplyItemId" ColumnName="SupplyItemId" />
+                <ScalarProperty Name="SupplyId" ColumnName="SupplyId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Model.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="Model.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WasteTypes">
+            <EntityTypeMapping TypeName="Model.WasteTypes">
+              <MappingFragment StoreEntitySet="WasteTypes">
+                <ScalarProperty Name="WasteTypeId" ColumnName="WasteTypeId" />
+                <ScalarProperty Name="WasteTypeName" ColumnName="WasteTypeName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

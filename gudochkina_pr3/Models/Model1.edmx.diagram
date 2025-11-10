@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="1d5620b580fd4de7b2dd5371942e78b5" Name="Diagram1">
+        <EntityTypeShape EntityType="Model.Clients" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Employees" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.OrderItems" Width="1.5" PointX="11.25" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.OrderStatuses" Width="1.5" PointX="3.75" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Posts" Width="1.5" PointX="1.5" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.ProductCategories" Width="1.5" PointX="3.75" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Products" Width="1.5" PointX="6" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.ProductSales" Width="1.5" PointX="3" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.RecyclingActs" Width="1.5" PointX="3.75" PointY="15" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.RecyclingCompanies" Width="1.5" PointX="1.5" PointY="18.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.RecyclingContracts" Width="1.5" PointX="1.5" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Roles" Width="1.5" PointX="10.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.SaleItems" Width="1.5" PointX="8.25" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.ServiceCategories" Width="1.5" PointX="6.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.ServiceOrders" Width="1.5" PointX="6" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Services" Width="1.5" PointX="9" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Suppliers" Width="1.5" PointX="3.75" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Supplies" Width="1.5" PointX="6" PointY="19.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.SupplyItems" Width="1.5" PointX="8.25" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.sysdiagrams" Width="1.5" PointX="10.75" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.Users" Width="1.5" PointX="13" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.WasteTypes" Width="1.5" PointX="1.5" PointY="21.25" IsExpanded="true" />
+        <AssociationConnector Association="Model.FK__ProductSa__Clien__5CD6CB2B" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__ServiceOr__Clien__5629CD9C" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__ProductSa__Emplo__5DCAEF64" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__ServiceOr__Emplo__5812160E" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Employees_Posts" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__OrderItem__Order__6754599E" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__OrderItem__Servi__68487DD7" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__ServiceOr__Statu__59063A47" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Products__Catego__4F7CD00D" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__SaleItems__Produ__6C190EBB" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__SupplyIte__Produ__6FE99F9F" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__SaleItems__SaleI__6B24EA82" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Recycling__Contr__72C60C4A" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Recycling__Waste__73BA3083" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_ServiceOrders_RecyclingActs" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Recycling__Compa__52593CB8" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK_Users_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Services__Catego__4BAC3F29" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__Supplies__Suppli__6383C8BA" ManuallyRouted="false" />
+        <AssociationConnector Association="Model.FK__SupplyIte__Suppl__6EF57B66" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
