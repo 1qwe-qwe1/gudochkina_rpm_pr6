@@ -43,7 +43,6 @@ namespace gudochkina_pr3.Pages
 
             Entities1 db = Entities1.GetContext();
 
-            //var user = db.Users.Where(x => x.Login == login && x.PasswordHash == password).FirstOrDefault()
             var user = db.Users
            .Include(u => u.Roles)
            .FirstOrDefault(x => x.Login == login && x.PasswordHash == password);
