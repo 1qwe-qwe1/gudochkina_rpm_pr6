@@ -30,6 +30,7 @@ namespace gudochkina_pr3.Pages
             click = 0;
         }
 
+  
         private void btnEnterGuests_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new Client(null, null));
@@ -64,9 +65,6 @@ namespace gudochkina_pr3.Pages
 
                     string captchaText = CaptchaGenerator.GenerateCaptchaText(6);
 
-                    tblCaptcha.Visibility = Visibility.Visible;
-                    tbCaptcha.Visibility = Visibility.Visible;
-
                 }
 
             }
@@ -82,6 +80,9 @@ namespace gudochkina_pr3.Pages
                 else
                 {
                     MessageBox.Show("Введите данные заново!");
+                    GenerateCapctcha();
+                    tbPassword.Clear();
+                    tbCaptcha.Clear();
                 }
             }
         }
