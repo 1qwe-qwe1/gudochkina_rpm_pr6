@@ -15,7 +15,12 @@ namespace gudochkina_pr3.Models
     
     public partial class Entities1 : DbContext
     {
-        private static Entities1 _context;
+        public Entities1()
+            : base("name=Entities1")
+        {
+        }
+        public static Entities1 _context;
+
         public static Entities1 GetContext()
         {
             if (_context == null)
@@ -24,11 +29,6 @@ namespace gudochkina_pr3.Models
             }
             return _context;
         }
-        public Entities1()
-            : base("name=Entities1")
-        {
-        }
-    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

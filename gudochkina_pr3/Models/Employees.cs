@@ -29,11 +29,13 @@ namespace gudochkina_pr3.Models
         public string PhoneNumber { get; set; }
         public System.DateTime HireDate { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public Nullable<int> UserId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductSales> ProductSales { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ServiceOrders> ServiceOrders { get; set; }
         public virtual Posts Posts { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

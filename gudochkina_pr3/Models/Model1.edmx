@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Clients">
           <Key>
             <PropertyRef Name="ClientId" />
@@ -16,6 +16,7 @@
           <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="100" />
           <Property Name="DiscountPercent" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="UserId" Type="int" />
         </EntityType>
         <EntityType Name="Employees">
           <Key>
@@ -29,6 +30,7 @@
           <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="HireDate" Type="date" Nullable="false" />
           <Property Name="IsActive" Type="bit" />
+          <Property Name="UserId" Type="int" />
         </EntityType>
         <EntityType Name="OrderItems">
           <Key>
@@ -433,6 +435,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Clients_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Clients" Type="Self.Clients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Clients">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Employees_Posts">
           <End Role="Posts" Type="Self.Posts" Multiplicity="1" />
           <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
@@ -442,6 +456,18 @@
             </Principal>
             <Dependent Role="Employees">
               <PropertyRef Name="PostId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Employees" Type="Self.Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -560,8 +586,16 @@
             <End Role="Supplies" EntitySet="Supplies" />
             <End Role="SupplyItems" EntitySet="SupplyItems" />
           </AssociationSet>
+          <AssociationSet Name="FK_Clients_Users" Association="Self.FK_Clients_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Clients" EntitySet="Clients" />
+          </AssociationSet>
           <AssociationSet Name="FK_Employees_Posts" Association="Self.FK_Employees_Posts">
             <End Role="Posts" EntitySet="Posts" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Users" Association="Self.FK_Employees_Users">
+            <End Role="Users" EntitySet="Users" />
             <End Role="Employees" EntitySet="Employees" />
           </AssociationSet>
           <AssociationSet Name="FK_ServiceOrders_RecyclingActs" Association="Self.FK_ServiceOrders_RecyclingActs">
@@ -573,8 +607,7 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -591,6 +624,8 @@
           <Property Name="DiscountPercent" Type="Decimal" Precision="5" Scale="2" />
           <NavigationProperty Name="ProductSales" Relationship="Self.FK__ProductSa__Clien__5CD6CB2B" FromRole="Clients" ToRole="ProductSales" />
           <NavigationProperty Name="ServiceOrders" Relationship="Self.FK__ServiceOr__Clien__5629CD9C" FromRole="Clients" ToRole="ServiceOrders" />
+          <Property Name="UserId" Type="Int32" />
+          <NavigationProperty Name="Users" Relationship="Model.FK_Clients_Users" FromRole="Clients" ToRole="Users" />
         </EntityType>
         <EntityType Name="Employees">
           <Key>
@@ -607,6 +642,8 @@
           <NavigationProperty Name="ProductSales" Relationship="Self.FK__ProductSa__Emplo__5DCAEF64" FromRole="Employees" ToRole="ProductSales" />
           <NavigationProperty Name="ServiceOrders" Relationship="Self.FK__ServiceOr__Emplo__5812160E" FromRole="Employees" ToRole="ServiceOrders" />
           <NavigationProperty Name="Posts" Relationship="Self.FK_Employees_Posts" FromRole="Employees" ToRole="Posts" />
+          <Property Name="UserId" Type="Int32" />
+          <NavigationProperty Name="Users" Relationship="Model.FK_Employees_Users" FromRole="Employees" ToRole="Users" />
         </EntityType>
         <EntityType Name="OrderItems">
           <Key>
@@ -826,6 +863,8 @@
           <Property Name="RegistrationDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="IsActive" Type="Boolean" />
           <NavigationProperty Name="Roles" Relationship="Self.FK_Users_Roles" FromRole="Users" ToRole="Roles" />
+          <NavigationProperty Name="Clients" Relationship="Model.FK_Clients_Users" FromRole="Users" ToRole="Clients" />
+          <NavigationProperty Name="Employees" Relationship="Model.FK_Employees_Users" FromRole="Users" ToRole="Employees" />
         </EntityType>
         <EntityType Name="WasteTypes">
           <Key>
@@ -1185,7 +1224,39 @@
             <End Role="Supplies" EntitySet="Supplies" />
             <End Role="SupplyItems" EntitySet="SupplyItems" />
           </AssociationSet>
+          <AssociationSet Name="FK_Clients_Users" Association="Model.FK_Clients_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Clients" EntitySet="Clients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employees_Users" Association="Model.FK_Employees_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Employees" EntitySet="Employees" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_Clients_Users">
+          <End Type="Model.Users" Role="Users" Multiplicity="0..1" />
+          <End Type="Model.Clients" Role="Clients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Clients">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employees_Users">
+          <End Type="Model.Users" Role="Users" Multiplicity="0..1" />
+          <End Type="Model.Employees" Role="Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employees">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1195,6 +1266,7 @@
           <EntitySetMapping Name="Clients">
             <EntityTypeMapping TypeName="Model.Clients">
               <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="ClientId" ColumnName="ClientId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
@@ -1208,6 +1280,7 @@
           <EntitySetMapping Name="Employees">
             <EntityTypeMapping TypeName="Model.Employees">
               <MappingFragment StoreEntitySet="Employees">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Surname" ColumnName="Surname" />

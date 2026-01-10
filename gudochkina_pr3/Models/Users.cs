@@ -14,6 +14,13 @@ namespace gudochkina_pr3.Models
     
     public partial class Users
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Users()
+        {
+            this.Clients = new HashSet<Clients>();
+            this.Employees = new HashSet<Employees>();
+        }
+    
         public int Id { get; set; }
         public string Login { get; set; }
         public string PasswordHash { get; set; }
@@ -22,5 +29,9 @@ namespace gudochkina_pr3.Models
         public Nullable<bool> IsActive { get; set; }
     
         public virtual Roles Roles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Clients> Clients { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Employees> Employees { get; set; }
     }
 }
