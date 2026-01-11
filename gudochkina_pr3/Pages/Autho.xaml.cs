@@ -58,7 +58,7 @@ namespace gudochkina_pr3.Pages
 
         private void btnEnterGuests_Click(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new Client(null, null));
+            NavigationService.Navigate(new Client(null, "guest", "Гость"));
         }
 
         private void btnEnter_Click(object sender, RoutedEventArgs e)
@@ -84,8 +84,7 @@ namespace gudochkina_pr3.Pages
                 if (user != null)
                 {
                     // Проверяем доступ для сотрудников
-                    if (user.Roles.Name.ToString().ToLower() == "сотрудник" ||
-                        user.Roles.Name.ToString().ToLower() == "employee")
+                    if (IsEmployeeRole(user.Roles.Name.ToString()))
                     {
                         if (!TimeHelper.IsWithinWorkingHours())
                         {
@@ -108,8 +107,7 @@ namespace gudochkina_pr3.Pages
                 if (user != null && tbCaptcha.Text == tblCaptcha.Text)
                 {
                     // Проверяем доступ для сотрудников
-                    if (user.Roles.Name.ToString().ToLower() == "сотрудник" ||
-                        user.Roles.Name.ToString().ToLower() == "employee")
+                    if (IsEmployeeRole(user.Roles.Name.ToString()))
                     {
                         if (!TimeHelper.IsWithinWorkingHours())
                         {
@@ -160,7 +158,14 @@ namespace gudochkina_pr3.Pages
             }
             LoadPage(user.Roles.Name.ToString(), user, surname, name, patronymic);
         }
+        private bool IsEmployeeRole(string roleName)
+        {
+            string role = roleName.ToLower();
 
+            return role == "администратор" ||
+                   role == "кассир" ||
+                   role == "фотограф";
+        }
         private void FailedLogin()
         {
             failedAttempts++;

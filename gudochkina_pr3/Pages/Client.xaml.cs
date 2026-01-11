@@ -44,7 +44,8 @@ namespace gudochkina_pr3.Pages
             UpdateGreetingText();
 
             // Если это сотрудник, проверяем рабочее время
-            if (role.ToLower() == "сотрудник" || role.ToLower() == "employee")
+            if (!string.IsNullOrEmpty(role) &&
+        (role.ToLower() == "сотрудник" || role.ToLower() == "employee"))
             {
                 StartWorkingHoursCheck();
             }
