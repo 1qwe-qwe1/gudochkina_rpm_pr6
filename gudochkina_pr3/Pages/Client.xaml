@@ -9,6 +9,19 @@
       Title="Client">
 
     <Grid>
-        
+        <StackPanel>
+            <!-- Приветствие (будет обновляться из кода) -->
+            <Border x:Name="greetingBorder" 
+                    Background="LightBlue" 
+                    Padding="10" 
+                    Margin="5">
+                <TextBlock x:Name="greetingTextBlock" 
+                           FontSize="16" 
+                           FontWeight="Bold"
+                           TextWrapping="Wrap"/>
+            </Border>
+
+            
+        </StackPanel>
     </Grid>
 </Page>

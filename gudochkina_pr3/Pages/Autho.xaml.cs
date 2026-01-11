@@ -74,6 +74,8 @@ namespace gudochkina_pr3.Pages
 
             var user = db.Users
            .Include(u => u.Roles)
+           .Include(u => u.Employees) // Добавляем загрузку данных сотрудника
+           .Include(u => u.Clients)
            .FirstOrDefault(x => x.Login == login && x.PasswordHash == password);
            
 
@@ -81,6 +83,17 @@ namespace gudochkina_pr3.Pages
             {
                 if (user != null)
                 {
+                    // Проверяем доступ для сотрудников
+                    if (user.Roles.Name.ToString().ToLower() == "сотрудник" ||
+                        user.Roles.Name.ToString().ToLower() == "employee")
+                    {
+                        if (!TimeHelper.IsWithinWorkingHours())
+                        {
+                            MessageBox.Show("Доступ запрещен! Рабочее время с 10:00 до 19:00.");
+                            return;
+                        }
+                    }
+
                     SuccessfulLogin(user);
                 }
                 else
@@ -94,6 +107,16 @@ namespace gudochkina_pr3.Pages
             {
                 if (user != null && tbCaptcha.Text == tblCaptcha.Text)
                 {
+                    // Проверяем доступ для сотрудников
+                    if (user.Roles.Name.ToString().ToLower() == "сотрудник" ||
+                        user.Roles.Name.ToString().ToLower() == "employee")
+                    {
+                        if (!TimeHelper.IsWithinWorkingHours())
+                        {
+                            MessageBox.Show("Доступ запрещен! Рабочее время с 10:00 до 19:00.");
+                            return;
+                        }
+                    }
                     SuccessfulLogin(user);
                 }
 
@@ -108,7 +131,34 @@ namespace gudochkina_pr3.Pages
             MessageBox.Show("Вы вошли под: " + user.Roles.Name.ToString());
             failedAttempts = 0;
             Block.ClearBlockTime();
-            LoadPage(user.Roles.Name.ToString(), user);
+
+            // Получаем ФИО пользователя
+            string surname = "";
+            string name = "";
+            string patronymic = "";
+
+            // В зависимости от роли получаем данные из соответствующей таблицы
+            if (user.Employees != null && user.Employees.Any())
+            {
+                var employee = user.Employees.First();
+                surname = employee.Surname ?? "";
+                name = employee.Name ?? "";
+                patronymic = employee.Patronymic ?? "";
+            }
+            else if (user.Clients != null && user.Clients.Any())
+            {
+                var client = user.Clients.First();
+                surname = client.Surname ?? "";
+                name = client.Name ?? "";
+                patronymic = client.Patronymic ?? "";
+            }
+            else
+            {
+                // Если нет данных в связанных таблицах, используем логин
+                surname = user.Login;
+                name = "";
+            }
+            LoadPage(user.Roles.Name.ToString(), user, surname, name, patronymic);
         }
 
         private void FailedLogin()
@@ -199,12 +249,12 @@ namespace gudochkina_pr3.Pages
             tblCaptcha.Text = capctchaText;
             tblCaptcha.TextDecorations = TextDecorations.Strikethrough;
         }
-        private void LoadPage(string _role, Users user)
+        private void LoadPage(string _role, Users user, string surname, string name, string patronymic)
 
         {
             click = 0;
 
-            NavigationService.Navigate(new Client(user, _role));
+            NavigationService.Navigate(new Client(user, _role, surname, name, patronymic));
 
         }
         public void ClearFields()
