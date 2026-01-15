@@ -20,8 +20,15 @@
                            FontWeight="Bold"
                            TextWrapping="Wrap"/>
             </Border>
+            <StackPanel x:Name="adminMenuPanel" Visibility="Collapsed" Margin="10">
+                <TextBlock Text="Администрирование" FontSize="14" FontWeight="Bold" Margin="0,0,0,10"/>
+                <WrapPanel>
+                    <Button x:Name="btnEmployees" Content="Сотрудники" 
+                    Click="btnEmployees_Click" Margin="0,0,10,10" Padding="10,5"/>
+                    <!-- Добавьте другие кнопки администратора по необходимости -->
+                </WrapPanel>
+            </StackPanel>
 
-            
         </StackPanel>
     </Grid>
 </Page>
