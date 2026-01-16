@@ -64,7 +64,7 @@
                 </ComboBox>
 
                 <!-- Кнопка добавления -->
-                <Button Grid.Column="2" Content="Добавить сотрудника" 
+                <Button Grid.Column="2" Content="Добавить" 
                         Click="btnAddEmployee_Click"
                         Padding="10,5" VerticalAlignment="Center"/>
             </Grid>

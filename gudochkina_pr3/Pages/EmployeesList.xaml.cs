@@ -38,9 +38,18 @@ namespace gudochkina_pr3.Pages
             {
                 using (var db = new Entities1())
                 {
+                    var employeeUserIds = db.Users
+                .Where(u => u.Roles.Name.ToLower() == "Сотрудник" ||
+                           u.Roles.Name.ToLower() == "Администратор" ||
+                           u.Roles.Name.ToLower() == "employee" ||
+                           u.Roles.Name.ToLower() == "administrator")
+                .Select(u => u.Id)
+                .ToList();
+
                     _allEmployees = db.Employees
                         .Include("Users.Roles") // В EF6 используем строки для Include
                         .Include("Posts")
+                        .Where(e => employeeUserIds.Contains(e.UserId.Value))
                         .AsEnumerable() // Переключаемся на LINQ to Objects
                         .Select(e => new EmployeeViewModel
                         {

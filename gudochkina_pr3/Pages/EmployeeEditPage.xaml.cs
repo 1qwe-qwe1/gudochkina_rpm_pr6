@@ -58,7 +58,7 @@ namespace gudochkina_pr3.Pages
                     // Загрузка должностей
                     var posts = db.Posts.ToList();
                     cmbPost.ItemsSource = posts;
-                    cmbPost.DisplayMemberPath = "Name";
+                    cmbPost.DisplayMemberPath = "PostName";
                     cmbPost.SelectedValuePath = "PostId";
 
                     // Загрузка ролей

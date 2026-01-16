@@ -8,161 +8,251 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="EmployeeEditPage" Background="White">
 
-    <ScrollViewer>
-        <Grid Margin="20">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- Заголовок -->
             <TextBlock Grid.Row="0" x:Name="tbTitle" 
                        Text="Добавление сотрудника"
-                       FontSize="18" FontWeight="Bold"
-                       Margin="0,0,0,20"/>
+                       FontSize="20" FontWeight="Bold" 
+                       Margin="10" HorizontalAlignment="Center"/>
 
-            <!-- Фото и основная информация -->
-            <Grid Grid.Row="1" Margin="0,0,0,20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Фото -->
-                <Border Grid.Column="0" BorderBrush="LightGray" 
-                        BorderThickness="1" Width="150" Height="150"
-                        Margin="0,0,20,0">
-                    <Image x:Name="imgPhoto" Stretch="Uniform">
-                        <Image.Style>
-                            <Style TargetType="Image">
-                                <Setter Property="Source" Value="/Resources/default-avatar.png"/>
-                            </Style>
-                        </Image.Style>
-                    </Image>
-                </Border>
-
-                <Button Grid.Column="0" Content="Добавить фото"
-                        Margin="0,160,0,0" Width="150"
-                        Click="btnAddPhoto_Click"/>
-
-                <!-- Основные поля -->
-                <Grid Grid.Column="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+            <!-- Основной контент -->
+            <Border Grid.Row="2" Background="#F5F5F5" Margin="10" Padding="15">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Фамилия -->
-                    <TextBlock Grid.Row="0" Grid.Column="0" 
-                               Text="Фамилия:" Margin="0,0,10,10"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" 
-                             x:Name="txtSurname" Margin="0,0,0,10"/>
+                    <!-- Фото слева -->
+                    <StackPanel Grid.Column="0" Width="180" Margin="0,0,20,0">
+                        <Border BorderBrush="LightGray" 
+                                BorderThickness="1" 
+                                Background="White"
+                                Width="150" 
+                                Height="150"
+                                HorizontalAlignment="Center">
+                            <Image x:Name="imgPhoto" 
+                                   Stretch="Uniform"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center">
+                                <Image.Style>
+                                    <Style TargetType="Image">
+                                        <Setter Property="Source" Value="/Resources/default-avatar.png"/>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                        </Border>
 
-                    <!-- Имя -->
-                    <TextBlock Grid.Row="1" Grid.Column="0" 
-                               Text="Имя:" Margin="0,0,10,10"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" 
-                             x:Name="txtName" Margin="0,0,0,10"/>
+                        <Button x:Name="btnAddPhoto" 
+                                Content="Добавить фото" 
+                                Click="btnAddPhoto_Click"
+                                Margin="0,10,0,0"
+                                Width="150"
+                                Padding="8,5"
+                                HorizontalAlignment="Center"/>
+                    </StackPanel>
 
-                    <!-- Отчество -->
-                    <TextBlock Grid.Row="2" Grid.Column="0" 
-                               Text="Отчество:" Margin="0,0,10,10">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Foreground" Value="Black"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Text, ElementName=txtPatronymic}" Value="">
-                                        <Setter Property="Foreground" Value="Gray"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-                    <TextBox Grid.Row="2" Grid.Column="1" 
-                             x:Name="txtPatronymic" Margin="0,0,0,10"/>
+                    <!-- Поля справа -->
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                    <!-- Телефон -->
-                    <TextBlock Grid.Row="3" Grid.Column="0" 
-                               Text="Телефон:" Margin="0,0,10,10"/>
-                    <TextBox Grid.Row="3" Grid.Column="1" 
-                             x:Name="txtPhoneNumber" Margin="0,0,0,10"/>
+                        <!-- Фамилия -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" 
+                                   Text="Фамилия:" 
+                                   Margin="0,0,10,10"
+                                   VerticalAlignment="Center"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" 
+                                 x:Name="txtSurname" 
+                                 Margin="0,0,0,10"
+                                 Height="28"
+                                 Padding="5"
+                                 FontSize="12"/>
+
+                        <!-- Имя -->
+                        <TextBlock Grid.Row="1" Grid.Column="0" 
+                                   Text="Имя:" 
+                                   Margin="0,0,10,10"
+                                   VerticalAlignment="Center"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" 
+                                 x:Name="txtName" 
+                                 Margin="0,0,0,10"
+                                 Height="28"
+                                 Padding="5"
+                                 FontSize="14"/>
+
+                        <!-- Отчество -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" 
+                                   Text="Отчество:" 
+                                   Margin="0,0,10,10"
+                                   VerticalAlignment="Center"
+                                   Foreground="#666666">
+                            <TextBlock.ToolTip>
+                                <TextBlock Text="Не обязательное поле" Foreground="Gray"/>
+                            </TextBlock.ToolTip>
+                        </TextBlock>
+                        <TextBox Grid.Row="2" Grid.Column="1" 
+                                 x:Name="txtPatronymic" 
+                                 Margin="0,0,0,10"
+                                 Height="28"
+                                 Padding="5"
+                                 FontSize="14"/>
+
+                        <!-- Телефон -->
+                        <TextBlock Grid.Row="3" Grid.Column="0" 
+                                   Text="Телефон:" 
+                                   Margin="0,0,10,10"
+                                   VerticalAlignment="Center"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" 
+                                 x:Name="txtPhoneNumber" 
+                                 Margin="0,0,0,10"
+                                 Height="28"
+                                 Padding="5"
+                                 FontSize="14"/>
+
+                        <!-- Статус -->
+                        <TextBlock Grid.Row="4" Grid.Column="0" 
+                                   Text="Статус:" 
+                                   Margin="0,0,10,10"
+                                   VerticalAlignment="Center"/>
+                        <ComboBox Grid.Row="4" Grid.Column="1" 
+                                  x:Name="cmbStatus" 
+                                  Margin="0,0,0,10"
+                                  Height="28"
+                                  Padding="5"
+                                  FontSize="14">
+                            <ComboBox.ItemContainerStyle>
+                                <Style TargetType="ComboBoxItem">
+                                    <Setter Property="Padding" Value="5"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                        </ComboBox>
+
+                        <!-- Должность -->
+                        <TextBlock Grid.Row="5" Grid.Column="0" 
+                                   Text="Должность:" 
+                                   Margin="0,0,10,10"
+                                   VerticalAlignment="Center"/>
+                        <ComboBox Grid.Row="5" Grid.Column="1" 
+                                  x:Name="cmbPost" 
+                                  Margin="0,0,0,10"
+                                  Height="28"
+                                  Padding="5"
+                                  FontSize="14"
+                                  DisplayMemberPath="PostName"
+                                  SelectedValuePath="PostId">
+                            <ComboBox.ItemContainerStyle>
+                                <Style TargetType="ComboBoxItem">
+                                    <Setter Property="Padding" Value="5"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                        </ComboBox>
+
+                        <!-- Роль -->
+                        <TextBlock Grid.Row="6" Grid.Column="0" 
+                                   Text="Роль:" 
+                                   Margin="0,0,10,10"
+                                   VerticalAlignment="Center"/>
+                        <ComboBox Grid.Row="6" Grid.Column="1" 
+                                  x:Name="cmbRole" 
+                                  Margin="0,0,0,10"
+                                  Height="28"
+                                  Padding="5"
+                                  FontSize="14"
+                                  DisplayMemberPath="Name"
+                                  SelectedValuePath="RoleID">
+                            <ComboBox.ItemContainerStyle>
+                                <Style TargetType="ComboBoxItem">
+                                    <Setter Property="Padding" Value="5"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                        </ComboBox>
+
+                        <!-- Логин -->
+                        <TextBlock Grid.Row="7" Grid.Column="0" 
+                                   Text="Логин:" 
+                                   Margin="0,0,10,10"
+                                   VerticalAlignment="Center"/>
+                        <TextBox Grid.Row="7" Grid.Column="1" 
+                                 x:Name="txtLogin" 
+                                 Margin="0,0,0,10"
+                                 Height="28"
+                                 Padding="5"
+                                 FontSize="14"/>
+
+                        <!-- Пароль -->
+                        <TextBlock Grid.Row="8" Grid.Column="0" 
+                                   Text="Пароль:" 
+                                   Margin="0,0,10,10"
+                                   VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="Black"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=tbTitle, Path=Text}" Value="Редактирование сотрудника">
+                                            <Setter Property="Foreground" Value="#666666"/>
+                                            <Setter Property="ToolTip">
+                                                <Setter.Value>
+                                                    <TextBlock Text="Оставьте пустым, чтобы не менять пароль" 
+                                                               Foreground="Gray"/>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <PasswordBox Grid.Row="8" Grid.Column="1" 
+                                     x:Name="txtPassword" 
+                                     Margin="0,0,0,10"
+                                     Height="28"
+                                     Padding="5"
+                                     FontSize="14"/>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </Border>
 
-            <!-- Дополнительная информация -->
-            <Grid Grid.Row="2" Margin="0,0,0,20">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Статус -->
-                <TextBlock Grid.Row="0" Grid.Column="0" 
-                           Text="Статус:" Margin="0,0,10,10"/>
-                <ComboBox Grid.Row="0" Grid.Column="1" 
-                          x:Name="cmbStatus" Margin="0,0,0,10"/>
-
-                <!-- Должность -->
-                <TextBlock Grid.Row="1" Grid.Column="0" 
-                           Text="Должность:" Margin="0,0,10,10"/>
-                <ComboBox Grid.Row="1" Grid.Column="1" 
-                          x:Name="cmbPost" Margin="0,0,0,10"/>
-
-                <!-- Роль -->
-                <TextBlock Grid.Row="2" Grid.Column="0" 
-                           Text="Роль:" Margin="0,0,10,10"/>
-                <ComboBox Grid.Row="2" Grid.Column="1" 
-                          x:Name="cmbRole" Margin="0,0,0,10"/>
-
-                <!-- Логин -->
-                <TextBlock Grid.Row="3" Grid.Column="0" 
-                           Text="Логин:" Margin="0,0,10,10"/>
-                <TextBox Grid.Row="3" Grid.Column="1" 
-                         x:Name="txtLogin" Margin="0,0,0,10"/>
-            </Grid>
-
-            <!-- Пароль и кнопки -->
-            <Grid Grid.Row="3">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <TextBlock Grid.Row="0" Grid.Column="0" 
-                           Text="Пароль:" Margin="0,0,10,20"/>
-                <PasswordBox Grid.Row="0" Grid.Column="1" 
-                             x:Name="txtPassword" Margin="0,0,0,20"/>
-
-                <!-- Кнопки -->
-                <StackPanel Grid.Row="1" Grid.Column="1" 
-                            Orientation="Horizontal" 
-                            HorizontalAlignment="Right">
-                    <Button x:Name="btnSave" Content="Сохранить" 
+            <!-- Кнопки -->
+            <Border Grid.Row="3" Background="#F5F5F5" Margin="10" Padding="10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="btnSave" 
+                            Content="Сохранить" 
                             Click="btnSave_Click" 
-                            Margin="0,0,10,0" Padding="20,10"/>
-                    <Button Content="Очистить" 
-                            Click="btnClear_Click"
-                            Padding="20,10"/>
+                            Margin="0,0,10,0" 
+                            Padding="15,8"
+                            MinWidth="100"
+                            MinHeight="50"
+                            FontSize="14"/>
                 </StackPanel>
-            </Grid>
+            </Border>
         </Grid>
     </ScrollViewer>
 </Page>

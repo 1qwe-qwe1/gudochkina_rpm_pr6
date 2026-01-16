@@ -27,5 +27,20 @@
             <Setter Property="FontFamily" Value="Comic Sans MS"/>
             <Setter Property="FontSize" Value="14"/>
         </Style>
+        <!-- Стили для ComboBox -->
+        <Style TargetType="ComboBox">
+            <Setter Property="BorderBrush" Value="#BDBDBD"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Стили для ComboBoxItem -->
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        
     </Application.Resources>
 </Application>
