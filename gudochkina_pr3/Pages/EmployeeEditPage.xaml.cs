@@ -3,23 +3,151 @@ using gudochkina_pr3.Services;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-
 
 namespace gudochkina_pr3.Pages
 {
+    /// <summary>
+    /// Модель для валидации данных сотрудника
+    /// </summary>
+    public class EmployeeValidationModel
+    {
+        [Required(ErrorMessage = "Фамилия обязательна для заполнения")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Фамилия должна содержать от 2 до 50 символов")]
+        [RegularExpression(@"^[А-ЯЁа-яёA-Za-z\s\-]+$", ErrorMessage = "Фамилия может содержать только буквы, пробелы и дефисы")]
+        public string Surname { get; set; }
+
+        [Required(ErrorMessage = "Имя обязательно для заполнения")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Имя должно содержать от 2 до 50 символов")]
+        [RegularExpression(@"^[А-ЯЁа-яёA-Za-z\s\-]+$", ErrorMessage = "Имя может содержать только буквы, пробелы и дефисы")]
+        public string Name { get; set; }
+
+        [StringLength(50, ErrorMessage = "Отчество не должно превышать 50 символов")]
+        [RegularExpression(@"^[А-ЯЁа-яёA-Za-z\s\-]*$", ErrorMessage = "Отчество может содержать только буквы, пробелы и дефисы")]
+        public string Patronymic { get; set; }
+
+        [Required(ErrorMessage = "Телефон обязателен для заполнения")]
+        [Phone(ErrorMessage = "Неверный формат телефона")]
+        [StringLength(20, MinimumLength = 5, ErrorMessage = "Телефон должен содержать от 5 до 20 символов")]
+        public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Логин обязателен для заполнения")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Логин должен содержать от 3 до 50 символов")]
+        [RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Логин может содержать только латинские буквы, цифры и подчеркивание")]
+        public string Login { get; set; }
+
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "Пароль должен содержать от 6 до 100 символов")]
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Статус обязателен для выбора")]
+        public string Status { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "Выберите должность")]
+        public int? PostId { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "Выберите роль")]
+        public int? RoleId { get; set; }
+
+        public byte[] Photo { get; set; }
+    }
+
+    /// <summary>
+    /// Класс для отображения ошибок валидации
+    /// </summary>
+    public class ValidationError
+    {
+        public string PropertyName { get; set; }
+        public string ErrorMessage { get; set; }
+    }
+
+    /// <summary>
+    /// Валидатор для сотрудника
+    /// </summary>
+    public class EmployeeValidator
+    {
+        public List<ValidationError> Validate(EmployeeValidationModel model, bool isNewEmployee)
+        {
+            var errors = new List<ValidationError>();
+            var validationContext = new ValidationContext(model);
+            var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
+
+            // Проверка атрибутов валидации
+            if (!Validator.TryValidateObject(model, validationContext, validationResults, true))
+            {
+                foreach (var validationResult in validationResults)
+                {
+                    foreach (var memberName in validationResult.MemberNames)
+                    {
+                        errors.Add(new ValidationError
+                        {
+                            PropertyName = memberName,
+                            ErrorMessage = validationResult.ErrorMessage
+                        });
+                    }
+                }
+            }
+
+            // Дополнительная валидация для нового сотрудника
+            if (isNewEmployee)
+            {
+                if (string.IsNullOrWhiteSpace(model.Password))
+                {
+                    errors.Add(new ValidationError
+                    {
+                        PropertyName = "Password",
+                        ErrorMessage = "Пароль обязателен для нового сотрудника"
+                    });
+                }
+                else if (model.Password.Length < 6)
+                {
+                    errors.Add(new ValidationError
+                    {
+                        PropertyName = "Password",
+                        ErrorMessage = "Пароль должен содержать минимум 6 символов"
+                    });
+                }
+            }
+
+            // Проверка уникальности логина
+            using (var db = new Entities1())
+            {
+                var existingUser = db.Users.FirstOrDefault(u => u.Login == model.Login);
+                if (existingUser != null)
+                {
+                    // Для редактирования - если это другой пользователь с таким же логином
+                    errors.Add(new ValidationError
+                    {
+                        PropertyName = "Login",
+                        ErrorMessage = "Пользователь с таким логином уже существует"
+                    });
+                }
+            }
+
+            // Проверка формата телефона
+            if (!string.IsNullOrWhiteSpace(model.PhoneNumber))
+            {
+                var phoneDigits = new string(model.PhoneNumber.Where(char.IsDigit).ToArray());
+                if (phoneDigits.Length < 10)
+                {
+                    errors.Add(new ValidationError
+                    {
+                        PropertyName = "PhoneNumber",
+                        ErrorMessage = "Номер телефона должен содержать минимум 10 цифр"
+                    });
+                }
+            }
+
+            return errors;
+        }
+    }
+
     /// <summary>
     /// Логика взаимодействия для EmployeeEditPage.xaml
     /// </summary>
@@ -27,10 +155,16 @@ namespace gudochkina_pr3.Pages
     {
         private int? _employeeId;
         private byte[] _photoBytes;
+        private EmployeeValidator _validator;
+
+        // Словарь для привязки ошибок к элементам управления
+        private Dictionary<string, FrameworkElement> _validationControls;
 
         public EmployeeEditPage()
         {
             InitializeComponent();
+            _validator = new EmployeeValidator();
+            InitializeValidationControls();
             LoadComboBoxData();
             tbTitle.Text = "Добавление сотрудника";
         }
@@ -39,9 +173,147 @@ namespace gudochkina_pr3.Pages
         {
             InitializeComponent();
             _employeeId = employeeId;
+            _validator = new EmployeeValidator();
+            InitializeValidationControls();
             LoadComboBoxData();
             LoadEmployeeData();
             tbTitle.Text = "Редактирование сотрудника";
+
+            // Для редактирования пароль не обязателен
+            txtPassword.Tag = "optional";
+        }
+
+        private void InitializeValidationControls()
+        {
+            _validationControls = new Dictionary<string, FrameworkElement>
+            {
+                { "Surname", txtSurname },
+                { "Name", txtName },
+                { "Patronymic", txtPatronymic },
+                { "PhoneNumber", txtPhoneNumber },
+                { "Login", txtLogin },
+                { "Password", txtPassword },
+                { "Status", cmbStatus },
+                { "PostId", cmbPost },
+                { "RoleId", cmbRole }
+            };
+
+            // Настройка валидации на лету
+            SetupRealTimeValidation();
+        }
+
+        private void SetupRealTimeValidation()
+        {
+            txtSurname.TextChanged += (s, e) => ValidateField("Surname", txtSurname.Text);
+            txtName.TextChanged += (s, e) => ValidateField("Name", txtName.Text);
+            txtPatronymic.TextChanged += (s, e) => ValidateField("Patronymic", txtPatronymic.Text);
+            txtPhoneNumber.TextChanged += (s, e) => ValidateField("PhoneNumber", txtPhoneNumber.Text);
+            txtLogin.TextChanged += (s, e) => ValidateField("Login", txtLogin.Text);
+            txtPassword.PasswordChanged += (s, e) => ValidateField("Password", txtPassword.Password);
+            cmbStatus.SelectionChanged += (s, e) => ValidateField("Status", cmbStatus.SelectedItem?.ToString());
+            cmbPost.SelectionChanged += (s, e) => ValidateField("PostId", cmbPost.SelectedValue);
+            cmbRole.SelectionChanged += (s, e) => ValidateField("RoleId", cmbRole.SelectedValue);
+        }
+
+        private void ValidateField(string propertyName, object value)
+        {
+            var model = CreateValidationModel();
+            SetPropertyValue(model, propertyName, value);
+
+            var errors = _validator.Validate(model, !_employeeId.HasValue);
+            var fieldErrors = errors.Where(e => e.PropertyName == propertyName).ToList();
+
+            ShowFieldErrors(propertyName, fieldErrors);
+        }
+
+        private void ShowFieldErrors(string propertyName, List<ValidationError> errors)
+        {
+            if (_validationControls.TryGetValue(propertyName, out var control))
+            {
+                // Удаляем предыдущие стили ошибок
+                if (control is TextBox textBox)
+                {
+                    textBox.Style = (Style)FindResource("TextBoxStyle");
+                    var toolTip = ToolTipService.GetToolTip(textBox) as ToolTip;
+                    if (toolTip != null)
+                    {
+                        toolTip.Content = null;
+                    }
+                }
+                else if (control is ComboBox comboBox)
+                {
+                    comboBox.Style = (Style)FindResource("ComboBoxStyle");
+                    var toolTip = ToolTipService.GetToolTip(comboBox) as ToolTip;
+                    if (toolTip != null)
+                    {
+                        toolTip.Content = null;
+                    }
+                }
+                else if (control is PasswordBox passwordBox)
+                {
+                    passwordBox.Style = (Style)FindResource("PasswordBoxStyle");
+                    var toolTip = ToolTipService.GetToolTip(passwordBox) as ToolTip;
+                    if (toolTip != null)
+                    {
+                        toolTip.Content = null;
+                    }
+                }
+
+                // Показываем новые ошибки
+                if (errors.Any())
+                {
+                    var errorMessage = string.Join("\n", errors.Select(e => e.ErrorMessage));
+
+                    if (control is TextBox textBoxError)
+                    {
+                        textBoxError.Style = (Style)FindResource("TextBoxErrorStyle");
+                        ToolTipService.SetToolTip(textBoxError, new ToolTip { Content = errorMessage });
+                    }
+                    else if (control is ComboBox comboBoxError)
+                    {
+                        comboBoxError.Style = (Style)FindResource("ComboBoxErrorStyle");
+                        ToolTipService.SetToolTip(comboBoxError, new ToolTip { Content = errorMessage });
+                    }
+                    else if (control is PasswordBox passwordBoxError)
+                    {
+                        passwordBoxError.Style = (Style)FindResource("PasswordBoxErrorStyle");
+                        ToolTipService.SetToolTip(passwordBoxError, new ToolTip { Content = errorMessage });
+                    }
+                }
+            }
+        }
+
+        private EmployeeValidationModel CreateValidationModel()
+        {
+            return new EmployeeValidationModel
+            {
+                Surname = txtSurname.Text,
+                Name = txtName.Text,
+                Patronymic = txtPatronymic.Text,
+                PhoneNumber = txtPhoneNumber.Text,
+                Login = txtLogin.Text,
+                Password = txtPassword.Password,
+                Status = cmbStatus.SelectedItem?.ToString(),
+                PostId = cmbPost.SelectedValue as int?,
+                RoleId = cmbRole.SelectedValue as int?,
+                Photo = _photoBytes
+            };
+        }
+
+        private void SetPropertyValue(EmployeeValidationModel model, string propertyName, object value)
+        {
+            var property = typeof(EmployeeValidationModel).GetProperty(propertyName);
+            if (property != null)
+            {
+                try
+                {
+                    property.SetValue(model, Convert.ChangeType(value, property.PropertyType));
+                }
+                catch
+                {
+                    // Если не удается преобразовать значение, оставляем как есть
+                }
+            }
         }
 
         private void LoadComboBoxData()
@@ -50,18 +322,18 @@ namespace gudochkina_pr3.Pages
             {
                 using (var db = new Entities1())
                 {
-                    // Загрузка статусов
+                    // Статусы
                     string[] statuses = new string[] { "Активен", "Неактивен" };
                     cmbStatus.ItemsSource = statuses;
                     cmbStatus.SelectedIndex = 0;
 
-                    // Загрузка должностей
+                    // Должности
                     var posts = db.Posts.ToList();
                     cmbPost.ItemsSource = posts;
                     cmbPost.DisplayMemberPath = "PostName";
                     cmbPost.SelectedValuePath = "PostId";
 
-                    // Загрузка ролей
+                    // Роли
                     var roles = db.Roles.ToList();
                     cmbRole.ItemsSource = roles;
                     cmbRole.DisplayMemberPath = "Name";
@@ -70,7 +342,8 @@ namespace gudochkina_pr3.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
+                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -93,27 +366,32 @@ namespace gudochkina_pr3.Pages
                         txtPhoneNumber.Text = employee.PhoneNumber;
                         txtLogin.Text = employee.Users?.Login;
 
-                        // Статус - используем GetValueOrDefault() для nullable bool
-                        bool isActive = employee.IsActive.GetValueOrDefault(); // или employee.IsActive ?? false
+                        bool isActive = employee.IsActive.GetValueOrDefault();
                         cmbStatus.SelectedItem = isActive ? "Активен" : "Неактивен";
 
-                        // Должность - PostId не nullable, проверяем если > 0
-                        if (employee.PostId > 0) // или if (employee.PostId != null && employee.PostId > 0)
+                        if (employee.PostId > 0)
                         {
                             cmbPost.SelectedValue = employee.PostId;
                         }
 
-                        // Роль
                         if (employee.Users?.RoleID != null)
                         {
                             cmbRole.SelectedValue = employee.Users.RoleID;
                         }
+
+                        // Загрузка фото
+                      /*  if (employee.Photo != null)
+                        {
+                            _photoBytes = employee.Photo;
+                            LoadImageFromBytes(_photoBytes);
+                        }*/
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка загрузки данных сотрудника: {ex.Message}");
+                MessageBox.Show($"Ошибка загрузки данных сотрудника: {ex.Message}", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -123,17 +401,17 @@ namespace gudochkina_pr3.Pages
             {
                 using (var ms = new MemoryStream(imageData))
                 {
-                    var bitmap = new System.Windows.Media.Imaging.BitmapImage();
+                    var bitmap = new BitmapImage();
                     bitmap.BeginInit();
                     bitmap.StreamSource = ms;
-                    bitmap.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();
                     imgPhoto.Source = bitmap;
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                // Если не удалось загрузить изображение, оставляем заглушку
+                Console.WriteLine($"Ошибка загрузки изображения: {ex.Message}");
             }
         }
 
@@ -141,29 +419,109 @@ namespace gudochkina_pr3.Pages
         {
             var openFileDialog = new OpenFileDialog
             {
-                Filter = "Image files (*.jpg, *.jpeg, *.png)|*.jpg;*.jpeg;*.png|All files (*.*)|*.*",
-                Title = "Выберите фотографию сотрудника"
+                Filter = "Image files (*.jpg, *.jpeg, *.png, *.bmp)|*.jpg;*.jpeg;*.png;*.bmp|All files (*.*)|*.*",
+                Title = "Выберите фотографию сотрудника",
+                Multiselect = false
             };
 
             if (openFileDialog.ShowDialog() == true)
             {
                 try
                 {
+                    var fileInfo = new FileInfo(openFileDialog.FileName);
+                    if (fileInfo.Length > 5 * 1024 * 1024) 
+                    {
+                        MessageBox.Show("Размер файла не должен превышать 5 МБ", "Ошибка",
+                            MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+
                     _photoBytes = File.ReadAllBytes(openFileDialog.FileName);
                     LoadImageFromBytes(_photoBytes);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка загрузки изображения: {ex.Message}");
+                    MessageBox.Show($"Ошибка загрузки изображения: {ex.Message}", "Ошибка",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            if (!ValidateInput())
-                return;
+            ClearAllValidationErrors();
 
+            var model = CreateValidationModel();
+            var errors = _validator.Validate(model, !_employeeId.HasValue);
+
+            if (errors.Any())
+            {
+                ShowAllValidationErrors(errors);
+
+                var errorMessage = "Обнаружены ошибки валидации:\n\n" +
+                    string.Join("\n", errors.Select(er => $"- {er.ErrorMessage}"));
+
+                MessageBox.Show(errorMessage, "Ошибки валидации",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            SaveEmployeeData();
+        }
+
+        private void ClearAllValidationErrors()
+        {
+            foreach (var control in _validationControls.Values)
+            {
+                if (control is TextBox textBox)
+                {
+                    textBox.Style = (Style)FindResource("TextBoxStyle");
+                    ToolTipService.SetToolTip(textBox, null);
+                }
+                else if (control is ComboBox comboBox)
+                {
+                    comboBox.Style = (Style)FindResource("ComboBoxStyle");
+                    ToolTipService.SetToolTip(comboBox, null);
+                }
+                else if (control is PasswordBox passwordBox)
+                {
+                    passwordBox.Style = (Style)FindResource("PasswordBoxStyle");
+                    ToolTipService.SetToolTip(passwordBox, null);
+                }
+            }
+        }
+
+        private void ShowAllValidationErrors(List<ValidationError> errors)
+        {
+            var groupedErrors = errors.GroupBy(e => e.PropertyName);
+
+            foreach (var group in groupedErrors)
+            {
+                if (_validationControls.TryGetValue(group.Key, out var control))
+                {
+                    var errorMessage = string.Join("\n", group.Select(e => e.ErrorMessage));
+
+                    if (control is TextBox textBox)
+                    {
+                        textBox.Style = (Style)FindResource("TextBoxErrorStyle");
+                        ToolTipService.SetToolTip(textBox, new ToolTip { Content = errorMessage });
+                    }
+                    else if (control is ComboBox comboBox)
+                    {
+                        comboBox.Style = (Style)FindResource("ComboBoxErrorStyle");
+                        ToolTipService.SetToolTip(comboBox, new ToolTip { Content = errorMessage });
+                    }
+                    else if (control is PasswordBox passwordBox)
+                    {
+                        passwordBox.Style = (Style)FindResource("PasswordBoxErrorStyle");
+                        ToolTipService.SetToolTip(passwordBox, new ToolTip { Content = errorMessage });
+                    }
+                }
+            }
+        }
+
+        private void SaveEmployeeData()
+        {
             try
             {
                 using (var db = new Entities1())
@@ -179,7 +537,8 @@ namespace gudochkina_pr3.Pages
                         {
                             UpdateEmployeeData(employee, db);
                             db.SaveChanges();
-                            MessageBox.Show("Данные сотрудника успешно обновлены!");
+                            MessageBox.Show("Данные сотрудника успешно обновлены!", "Успех",
+                                MessageBoxButton.OK, MessageBoxImage.Information);
                             NavigationService.GoBack();
                         }
                     }
@@ -189,7 +548,6 @@ namespace gudochkina_pr3.Pages
                         var newEmployee = new Employees();
                         UpdateEmployeeData(newEmployee, db);
 
-                        // Создание пользователя
                         var user = new Users
                         {
                             Login = txtLogin.Text,
@@ -204,43 +562,43 @@ namespace gudochkina_pr3.Pages
                         db.Employees.Add(newEmployee);
                         db.SaveChanges();
 
-                        MessageBox.Show("Сотрудник успешно добавлен!");
+                        MessageBox.Show("Сотрудник успешно добавлен!", "Успех",
+                            MessageBoxButton.OK, MessageBoxImage.Information);
                         NavigationService.GoBack();
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка сохранения: {ex.Message}");
+                MessageBox.Show($"Ошибка сохранения: {ex.Message}\n\nДетали: {ex.InnerException?.Message}", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void UpdateEmployeeData(Employees employee, Entities1 db)
         {
-            employee.Surname = txtSurname.Text;
-            employee.Name = txtName.Text;
-            employee.Patronymic = txtPatronymic.Text;
-            employee.PhoneNumber = txtPhoneNumber.Text;
+            employee.Surname = txtSurname.Text.Trim();
+            employee.Name = txtName.Text.Trim();
+            employee.Patronymic = txtPatronymic.Text?.Trim();
+            employee.PhoneNumber = txtPhoneNumber.Text.Trim();
             employee.IsActive = cmbStatus.SelectedItem.ToString() == "Активен";
             employee.HireDate = DateTime.Now;
+          //  employee.Photo = _photoBytes;
 
             if (cmbPost.SelectedValue != null)
             {
                 employee.PostId = (int)cmbPost.SelectedValue;
             }
 
-            // Обновление логина пользователя
             if (employee.Users != null && !string.IsNullOrEmpty(txtLogin.Text))
             {
-                employee.Users.Login = txtLogin.Text;
+                employee.Users.Login = txtLogin.Text.Trim();
 
-                // Обновление пароля, если он введен
                 if (!string.IsNullOrEmpty(txtPassword.Password))
                 {
                     employee.Users.PasswordHash = Hash.HashPassword(txtPassword.Password);
                 }
 
-                // Обновление роли
                 if (cmbRole.SelectedValue != null)
                 {
                     employee.Users.RoleID = (int)cmbRole.SelectedValue;
@@ -248,41 +606,10 @@ namespace gudochkina_pr3.Pages
             }
         }
 
-        private bool ValidateInput()
-        {
-            if (string.IsNullOrWhiteSpace(txtSurname.Text))
-            {
-                MessageBox.Show("Введите фамилию!");
-                txtSurname.Focus();
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(txtName.Text))
-            {
-                MessageBox.Show("Введите имя!");
-                txtName.Focus();
-                return false;
-            }
-
-            if (!_employeeId.HasValue && string.IsNullOrWhiteSpace(txtPassword.Password))
-            {
-                MessageBox.Show("Введите пароль для нового сотрудника!");
-                txtPassword.Focus();
-                return false;
-            }
-
-            if (cmbRole.SelectedItem == null)
-            {
-                MessageBox.Show("Выберите роль!");
-                cmbRole.Focus();
-                return false;
-            }
-
-            return true;
-        }
-
         private void btnClear_Click(object sender, RoutedEventArgs e)
         {
+            ClearAllValidationErrors();
+
             txtSurname.Clear();
             txtName.Clear();
             txtPatronymic.Clear();
@@ -293,19 +620,82 @@ namespace gudochkina_pr3.Pages
             cmbPost.SelectedItem = null;
             cmbRole.SelectedItem = null;
 
-            // Сброс фото на заглушку
             try
             {
-                imgPhoto.Source = new System.Windows.Media.Imaging.BitmapImage(
+                imgPhoto.Source = new BitmapImage(
                     new Uri("pack://application:,,,/Resources/default-avatar.png"));
             }
             catch
             {
-                // Если не удалось загрузить заглушку, просто очищаем
                 imgPhoto.Source = null;
             }
 
             _photoBytes = null;
+        }
+
+        private void txtPhoneNumber_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Разрешаем только цифры, плюс, скобки, пробел и дефис
+            foreach (char c in e.Text)
+            {
+                if (!char.IsDigit(c) && c != '+' && c != '(' && c != ')' && c != ' ' && c != '-')
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+        }
+
+        private void txtLogin_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Разрешаем только латинские буквы, цифры и подчеркивание
+            foreach (char c in e.Text)
+            {
+                if (!char.IsLetterOrDigit(c) && c != '_')
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+        }
+
+        private void txtSurname_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Разрешаем только буквы, пробелы и дефисы
+            foreach (char c in e.Text)
+            {
+                if (!char.IsLetter(c) && c != ' ' && c != '-')
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+        }
+
+        private void txtName_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Разрешаем только буквы, пробелы и дефисы
+            foreach (char c in e.Text)
+            {
+                if (!char.IsLetter(c) && c != ' ' && c != '-')
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+        }
+
+        private void txtPatronymic_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            // Разрешаем только буквы, пробелы и дефисы
+            foreach (char c in e.Text)
+            {
+                if (!char.IsLetter(c) && c != ' ' && c != '-')
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
         }
     }
 }
