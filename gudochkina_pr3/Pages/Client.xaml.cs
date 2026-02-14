@@ -40,17 +40,13 @@ namespace gudochkina_pr3.Pages
             _name = name;
             _patronymic = patronymic;
 
-            // Устанавливаем приветствие
             UpdateGreetingText();
 
-            // Показываем меню администратора если пользователь - администратор
             if (_role.ToLower() == "администратор" || _role.ToLower() == "administrator")
             {
                 adminMenuPanel.Visibility = Visibility.Visible;
             }
 
-
-            // Если это сотрудник, проверяем рабочее время
             if (!string.IsNullOrEmpty(role) &&
         (role.ToLower() == "сотрудник" || role.ToLower() == "employee"))
             {
@@ -80,7 +76,6 @@ namespace gudochkina_pr3.Pages
                 {
                     _workTimer.Stop();
                     MessageBox.Show("Рабочее время закончилось! Доступ закрыт.");
-                    // Возвращаем на страницу авторизации
                     NavigationService?.Navigate(new Autho());
                 }
             };
@@ -88,8 +83,6 @@ namespace gudochkina_pr3.Pages
         }
 
         
-
-        // Очистка ресурсов при выгрузке страницы
         private void Client_Unloaded(object sender, RoutedEventArgs e)
         {
             if (_workTimer != null)
@@ -100,7 +93,6 @@ namespace gudochkina_pr3.Pages
         }
         private void btnEmployees_Click(object sender, RoutedEventArgs e)
         {
-            // Переход на страницу управления сотрудниками
             NavigationService.Navigate(new EmployeesList());
         }
     }

@@ -8,7 +8,6 @@ namespace gudochkina_pr3.Pages
 {
 public partial class EmployeeEditPage
     {
-        // BoolToColorConverter.cs
         public class BoolToColorConverter : IValueConverter
         {
             public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

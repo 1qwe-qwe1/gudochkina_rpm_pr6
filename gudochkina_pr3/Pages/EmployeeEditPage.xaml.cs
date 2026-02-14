@@ -14,49 +14,6 @@ using System.Windows.Navigation;
 
 namespace gudochkina_pr3.Pages
 {
-    /// <summary>
-    /// Модель для валидации данных сотрудника
-    /// </summary>
-    public class EmployeeValidationModel
-    {
-        [Required(ErrorMessage = "Фамилия обязательна для заполнения")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "Фамилия должна содержать от 2 до 50 символов")]
-        [RegularExpression(@"^[А-ЯЁа-яёA-Za-z\s\-]+$", ErrorMessage = "Фамилия может содержать только буквы, пробелы и дефисы")]
-        public string Surname { get; set; }
-
-        [Required(ErrorMessage = "Имя обязательно для заполнения")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "Имя должно содержать от 2 до 50 символов")]
-        [RegularExpression(@"^[А-ЯЁа-яёA-Za-z\s\-]+$", ErrorMessage = "Имя может содержать только буквы, пробелы и дефисы")]
-        public string Name { get; set; }
-
-        [StringLength(50, ErrorMessage = "Отчество не должно превышать 50 символов")]
-        [RegularExpression(@"^[А-ЯЁа-яёA-Za-z\s\-]*$", ErrorMessage = "Отчество может содержать только буквы, пробелы и дефисы")]
-        public string Patronymic { get; set; }
-
-        [Required(ErrorMessage = "Телефон обязателен для заполнения")]
-        [Phone(ErrorMessage = "Неверный формат телефона")]
-        [StringLength(20, MinimumLength = 5, ErrorMessage = "Телефон должен содержать от 5 до 20 символов")]
-        public string PhoneNumber { get; set; }
-
-        [Required(ErrorMessage = "Логин обязателен для заполнения")]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Логин должен содержать от 3 до 50 символов")]
-        [RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Логин может содержать только латинские буквы, цифры и подчеркивание")]
-        public string Login { get; set; }
-
-        [StringLength(100, MinimumLength = 6, ErrorMessage = "Пароль должен содержать от 6 до 100 символов")]
-        public string Password { get; set; }
-
-        [Required(ErrorMessage = "Статус обязателен для выбора")]
-        public string Status { get; set; }
-
-        [Range(1, int.MaxValue, ErrorMessage = "Выберите должность")]
-        public int? PostId { get; set; }
-
-        [Range(1, int.MaxValue, ErrorMessage = "Выберите роль")]
-        public int? RoleId { get; set; }
-
-        public byte[] Photo { get; set; }
-    }
 
     /// <summary>
     /// Класс для отображения ошибок валидации
@@ -72,19 +29,21 @@ namespace gudochkina_pr3.Pages
     /// </summary>
     public class EmployeeValidator
     {
-        public List<ValidationError> Validate(EmployeeValidationModel model, bool isNewEmployee)
+        public List<ValidationError> Validate(EmployeeValidationModel model, bool isNewEmployee, int? existingUserId = null)
         {
             var errors = new List<ValidationError>();
             var validationContext = new ValidationContext(model);
             var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
 
-            // Проверка атрибутов валидации
             if (!Validator.TryValidateObject(model, validationContext, validationResults, true))
             {
                 foreach (var validationResult in validationResults)
                 {
                     foreach (var memberName in validationResult.MemberNames)
                     {
+                        if (memberName == "Password" && !isNewEmployee)
+                            continue;
+
                         errors.Add(new ValidationError
                         {
                             PropertyName = memberName,
@@ -94,7 +53,6 @@ namespace gudochkina_pr3.Pages
                 }
             }
 
-            // Дополнительная валидация для нового сотрудника
             if (isNewEmployee)
             {
                 if (string.IsNullOrWhiteSpace(model.Password))
@@ -121,16 +79,25 @@ namespace gudochkina_pr3.Pages
                 var existingUser = db.Users.FirstOrDefault(u => u.Login == model.Login);
                 if (existingUser != null)
                 {
-                    // Для редактирования - если это другой пользователь с таким же логином
-                    errors.Add(new ValidationError
+                    if (existingUserId.HasValue && existingUser.Id != existingUserId.Value)
                     {
-                        PropertyName = "Login",
-                        ErrorMessage = "Пользователь с таким логином уже существует"
-                    });
+                        errors.Add(new ValidationError
+                        {
+                            PropertyName = "Login",
+                            ErrorMessage = "Пользователь с таким логином уже существует"
+                        });
+                    }
+                    else if (!existingUserId.HasValue)
+                    {
+                        errors.Add(new ValidationError
+                        {
+                            PropertyName = "Login",
+                            ErrorMessage = "Пользователь с таким логином уже существует"
+                        });
+                    }
                 }
             }
 
-            // Проверка формата телефона
             if (!string.IsNullOrWhiteSpace(model.PhoneNumber))
             {
                 var phoneDigits = new string(model.PhoneNumber.Where(char.IsDigit).ToArray());
@@ -157,7 +124,6 @@ namespace gudochkina_pr3.Pages
         private byte[] _photoBytes;
         private EmployeeValidator _validator;
 
-        // Словарь для привязки ошибок к элементам управления
         private Dictionary<string, FrameworkElement> _validationControls;
 
         public EmployeeEditPage()
@@ -179,7 +145,6 @@ namespace gudochkina_pr3.Pages
             LoadEmployeeData();
             tbTitle.Text = "Редактирование сотрудника";
 
-            // Для редактирования пароль не обязателен
             txtPassword.Tag = "optional";
         }
 
@@ -198,7 +163,6 @@ namespace gudochkina_pr3.Pages
                 { "RoleId", cmbRole }
             };
 
-            // Настройка валидации на лету
             SetupRealTimeValidation();
         }
 
@@ -220,7 +184,20 @@ namespace gudochkina_pr3.Pages
             var model = CreateValidationModel();
             SetPropertyValue(model, propertyName, value);
 
-            var errors = _validator.Validate(model, !_employeeId.HasValue);
+            int? existingUserId = null;
+            if (_employeeId.HasValue)
+            {
+                using (var db = new Entities1())
+                {
+                    var employee = db.Employees.FirstOrDefault(e => e.EmployeeId == _employeeId);
+                    if (employee?.UserId.HasValue == true)
+                    {
+                        existingUserId = employee.UserId.Value;
+                    }
+                }
+            }
+
+            var errors = _validator.Validate(model, !_employeeId.HasValue, existingUserId);
             var fieldErrors = errors.Where(e => e.PropertyName == propertyName).ToList();
 
             ShowFieldErrors(propertyName, fieldErrors);
@@ -230,7 +207,6 @@ namespace gudochkina_pr3.Pages
         {
             if (_validationControls.TryGetValue(propertyName, out var control))
             {
-                // Удаляем предыдущие стили ошибок
                 if (control is TextBox textBox)
                 {
                     textBox.Style = (Style)FindResource("TextBoxStyle");
@@ -259,7 +235,6 @@ namespace gudochkina_pr3.Pages
                     }
                 }
 
-                // Показываем новые ошибки
                 if (errors.Any())
                 {
                     var errorMessage = string.Join("\n", errors.Select(e => e.ErrorMessage));
@@ -311,7 +286,7 @@ namespace gudochkina_pr3.Pages
                 }
                 catch
                 {
-                    // Если не удается преобразовать значение, оставляем как есть
+                   
                 }
             }
         }
@@ -322,18 +297,15 @@ namespace gudochkina_pr3.Pages
             {
                 using (var db = new Entities1())
                 {
-                    // Статусы
                     string[] statuses = new string[] { "Активен", "Неактивен" };
                     cmbStatus.ItemsSource = statuses;
                     cmbStatus.SelectedIndex = 0;
 
-                    // Должности
                     var posts = db.Posts.ToList();
                     cmbPost.ItemsSource = posts;
                     cmbPost.DisplayMemberPath = "PostName";
                     cmbPost.SelectedValuePath = "PostId";
 
-                    // Роли
                     var roles = db.Roles.ToList();
                     cmbRole.ItemsSource = roles;
                     cmbRole.DisplayMemberPath = "Name";
@@ -452,7 +424,20 @@ namespace gudochkina_pr3.Pages
             ClearAllValidationErrors();
 
             var model = CreateValidationModel();
-            var errors = _validator.Validate(model, !_employeeId.HasValue);
+            int? existingUserId = null;
+            if (_employeeId.HasValue)
+            {
+                using (var db = new Entities1())
+                {
+                    var employee = db.Employees.FirstOrDefault(f => f.EmployeeId == _employeeId);
+                    if (employee?.UserId.HasValue == true)
+                    {
+                        existingUserId = employee.UserId.Value;
+                    }
+                }
+            }
+
+            var errors = _validator.Validate(model, !_employeeId.HasValue, existingUserId);
 
             if (errors.Any())
             {
@@ -528,7 +513,6 @@ namespace gudochkina_pr3.Pages
                 {
                     if (_employeeId.HasValue)
                     {
-                        // Редактирование существующего сотрудника
                         var employee = db.Employees
                             .Include("Users")
                             .FirstOrDefault(emp => emp.EmployeeId == _employeeId);
@@ -544,7 +528,6 @@ namespace gudochkina_pr3.Pages
                     }
                     else
                     {
-                        // Добавление нового сотрудника
                         var newEmployee = new Employees();
                         UpdateEmployeeData(newEmployee, db);
 
@@ -635,7 +618,6 @@ namespace gudochkina_pr3.Pages
 
         private void txtPhoneNumber_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            // Разрешаем только цифры, плюс, скобки, пробел и дефис
             foreach (char c in e.Text)
             {
                 if (!char.IsDigit(c) && c != '+' && c != '(' && c != ')' && c != ' ' && c != '-')
@@ -648,7 +630,6 @@ namespace gudochkina_pr3.Pages
 
         private void txtLogin_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            // Разрешаем только латинские буквы, цифры и подчеркивание
             foreach (char c in e.Text)
             {
                 if (!char.IsLetterOrDigit(c) && c != '_')
@@ -661,7 +642,6 @@ namespace gudochkina_pr3.Pages
 
         private void txtSurname_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            // Разрешаем только буквы, пробелы и дефисы
             foreach (char c in e.Text)
             {
                 if (!char.IsLetter(c) && c != ' ' && c != '-')
@@ -674,7 +654,6 @@ namespace gudochkina_pr3.Pages
 
         private void txtName_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            // Разрешаем только буквы, пробелы и дефисы
             foreach (char c in e.Text)
             {
                 if (!char.IsLetter(c) && c != ' ' && c != '-')
@@ -687,7 +666,6 @@ namespace gudochkina_pr3.Pages
 
         private void txtPatronymic_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            // Разрешаем только буквы, пробелы и дефисы
             foreach (char c in e.Text)
             {
                 if (!char.IsLetter(c) && c != ' ' && c != '-')

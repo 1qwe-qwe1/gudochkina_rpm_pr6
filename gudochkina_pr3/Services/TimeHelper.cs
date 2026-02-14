@@ -8,7 +8,6 @@ namespace gudochkina_pr3.Services
 {
     internal class TimeHelper
     {
-        // Метод для определения времени суток по текущему времени
         public static string GetTimeOfDayGreeting()
         {
             var hour = DateTime.Now.Hour;
@@ -20,10 +19,9 @@ namespace gudochkina_pr3.Services
             else if (hour >= 17 && hour <= 19)
                 return "Добрый вечер";
             else
-                return "Добрый день"; // По умолчанию, если время вне указанных диапазонов
+                return "Добрый день";
         }
 
-        // Метод для проверки, находится ли текущее время в рабочем интервале (10:00-19:00)
         public static bool IsWithinWorkingHours()
         {
             var now = DateTime.Now.TimeOfDay;
@@ -33,7 +31,6 @@ namespace gudochkina_pr3.Services
             return now >= start && now <= end;
         }
 
-        // Метод для получения полного приветствия с ФИО
         public static string GetFullGreeting(string surname, string name, string patronymic = null)
         {
             string timeOfDay = GetTimeOfDayGreeting();

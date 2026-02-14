@@ -74,7 +74,7 @@ namespace gudochkina_pr3.Pages
 
             var user = db.Users
            .Include(u => u.Roles)
-           .Include(u => u.Employees) // Добавляем загрузку данных сотрудника
+           .Include(u => u.Employees)
            .Include(u => u.Clients)
            .FirstOrDefault(x => x.Login == login && x.PasswordHash == password);
            
@@ -83,7 +83,6 @@ namespace gudochkina_pr3.Pages
             {
                 if (user != null)
                 {
-                    // Проверяем доступ для сотрудников
                     if (IsEmployeeRole(user.Roles.Name.ToString()))
                     {
                         if (!TimeHelper.IsWithinWorkingHours())
@@ -106,7 +105,6 @@ namespace gudochkina_pr3.Pages
             {
                 if (user != null && tbCaptcha.Text == tblCaptcha.Text)
                 {
-                    // Проверяем доступ для сотрудников
                     if (IsEmployeeRole(user.Roles.Name.ToString()))
                     {
                         if (!TimeHelper.IsWithinWorkingHours())
@@ -130,12 +128,10 @@ namespace gudochkina_pr3.Pages
             failedAttempts = 0;
             Block.ClearBlockTime();
 
-            // Получаем ФИО пользователя
             string surname = "";
             string name = "";
             string patronymic = "";
 
-            // В зависимости от роли получаем данные из соответствующей таблицы
             if (user.Employees != null && user.Employees.Any())
             {
                 var employee = user.Employees.First();
@@ -152,7 +148,6 @@ namespace gudochkina_pr3.Pages
             }
             else
             {
-                // Если нет данных в связанных таблицах, используем логин
                 surname = user.Login;
                 name = "";
             }

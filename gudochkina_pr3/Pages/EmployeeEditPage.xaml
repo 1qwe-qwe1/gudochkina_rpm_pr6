@@ -214,28 +214,33 @@
                                    VerticalAlignment="Center">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="Foreground" Value="Black"/>
-                                    <Setter Property="FontSize" Value="14"/>
+                                    <Setter Property="Visibility" Value="Collapsed"/>
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ElementName=tbTitle, Path=Text}" Value="Редактирование сотрудника">
-                                            <Setter Property="Foreground" Value="#666666"/>
-                                            <Setter Property="ToolTip">
-                                                <Setter.Value>
-                                                    <TextBlock Text="Оставьте пустым, чтобы не менять пароль" 
-                                                               Foreground="Gray"/>
-                                                </Setter.Value>
-                                            </Setter>
+                                        <DataTrigger Binding="{Binding ElementName=tbTitle, Path=Text}" Value="Добавление сотрудника">
+                                            <Setter Property="Visibility" Value="Visible"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
                         <PasswordBox Grid.Row="8" Grid.Column="1" 
-                                     x:Name="txtPassword" 
-                                     Margin="0,0,0,10"
-                                     Height="28"
-                                     Padding="5"
-                                     FontSize="14"/>
+             x:Name="txtPassword" 
+             Margin="0,0,0,10"
+             Height="28"
+             Padding="5"
+             FontSize="14"
+             Visibility="Collapsed">
+                            <PasswordBox.Style>
+                                <Style TargetType="PasswordBox">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=tbTitle, Path=Text}" Value="Добавление сотрудника">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </PasswordBox.Style>
+                        </PasswordBox>
                     </Grid>
                 </Grid>
             </Border>

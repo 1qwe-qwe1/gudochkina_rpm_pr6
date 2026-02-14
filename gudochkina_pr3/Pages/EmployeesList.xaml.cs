@@ -28,6 +28,11 @@ namespace gudochkina_pr3.Pages
         public EmployeesList()
         {
             InitializeComponent();
+            this.Loaded += EmployeesList_Loaded;
+        }
+
+        private void EmployeesList_Loaded(object sender, RoutedEventArgs e)
+        {
             LoadEmployees();
             LoadRolesFilter();
         }
@@ -47,10 +52,10 @@ namespace gudochkina_pr3.Pages
                 .ToList();
 
                     _allEmployees = db.Employees
-                        .Include("Users.Roles") // В EF6 используем строки для Include
+                        .Include("Users.Roles")
                         .Include("Posts")
                         .Where(e => employeeUserIds.Contains(e.UserId.Value))
-                        .AsEnumerable() // Переключаемся на LINQ to Objects
+                        .AsEnumerable()
                         .Select(e => new EmployeeViewModel
                         {
                             EmployeeId = e.EmployeeId,
@@ -120,7 +125,6 @@ namespace gudochkina_pr3.Pages
 
             var filtered = _allEmployees.AsEnumerable();
 
-            // Фильтр по поиску
             if (!string.IsNullOrWhiteSpace(txtSearch.Text))
             {
                 var searchText = txtSearch.Text.ToLower();
@@ -129,7 +133,6 @@ namespace gudochkina_pr3.Pages
                     (emp.PhoneNumber != null && emp.PhoneNumber.ToLower().Contains(searchText)));
             }
 
-            // Фильтр по роли
             if (cmbRoleFilter.SelectedItem is ComboBoxItem selectedRole &&
                 selectedRole.Content.ToString() != "Все роли")
             {
