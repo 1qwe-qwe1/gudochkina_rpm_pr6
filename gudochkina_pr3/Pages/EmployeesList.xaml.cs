@@ -62,7 +62,7 @@ namespace gudochkina_pr3.Pages
                             Surname = e.Surname,
                             Name = e.Name,
                             Patronymic = e.Patronymic,
-                            PhoneNumber = e.PhoneNumber,
+                            PhoneNumber = e.Users.PhoneNumber,
                             RoleName = e.Users?.Roles?.Name ?? "Не указана",
                             PostName = e.Posts?.PostName ?? "Не указана",
                             IsActive = e.IsActive,

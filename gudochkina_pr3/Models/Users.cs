@@ -27,6 +27,8 @@ namespace gudochkina_pr3.Models
         public Nullable<int> RoleID { get; set; }
         public System.DateTime RegistrationDate { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
     
         public virtual Roles Roles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

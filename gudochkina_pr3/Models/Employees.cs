@@ -26,7 +26,6 @@ namespace gudochkina_pr3.Models
         public string Surname { get; set; }
         public string Patronymic { get; set; }
         public int PostId { get; set; }
-        public string PhoneNumber { get; set; }
         public System.DateTime HireDate { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<int> UserId { get; set; }

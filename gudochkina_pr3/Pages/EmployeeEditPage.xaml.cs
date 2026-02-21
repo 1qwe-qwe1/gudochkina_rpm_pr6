@@ -327,6 +327,7 @@ namespace gudochkina_pr3.Pages
                 {
                     var employee = db.Employees
                         .Include("Users.Roles")
+                        .Include("Users.PhoneNumber")
                         .Include("Posts")
                         .FirstOrDefault(e => e.EmployeeId == _employeeId);
 
@@ -335,7 +336,7 @@ namespace gudochkina_pr3.Pages
                         txtSurname.Text = employee.Surname;
                         txtName.Text = employee.Name;
                         txtPatronymic.Text = employee.Patronymic;
-                        txtPhoneNumber.Text = employee.PhoneNumber;
+                        txtPhoneNumber.Text = employee.Users.PhoneNumber;
                         txtLogin.Text = employee.Users?.Login;
 
                         bool isActive = employee.IsActive.GetValueOrDefault();
@@ -563,7 +564,7 @@ namespace gudochkina_pr3.Pages
             employee.Surname = txtSurname.Text.Trim();
             employee.Name = txtName.Text.Trim();
             employee.Patronymic = txtPatronymic.Text?.Trim();
-            employee.PhoneNumber = txtPhoneNumber.Text.Trim();
+            employee.Users.PhoneNumber = txtPhoneNumber.Text.Trim();
             employee.IsActive = cmbStatus.SelectedItem.ToString() == "Активен";
             employee.HireDate = DateTime.Now;
           //  employee.Photo = _photoBytes;

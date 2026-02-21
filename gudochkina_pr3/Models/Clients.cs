@@ -25,8 +25,6 @@ namespace gudochkina_pr3.Models
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Patronymic { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Email { get; set; }
         public Nullable<decimal> DiscountPercent { get; set; }
         public Nullable<int> UserId { get; set; }
     

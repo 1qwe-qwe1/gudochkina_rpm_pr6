@@ -19,6 +19,7 @@ namespace gudochkina_pr3.Models
             : base("name=Entities1")
         {
         }
+
         public static Entities1 _context;
 
         public static Entities1 GetContext()
@@ -29,6 +30,7 @@ namespace gudochkina_pr3.Models
             }
             return _context;
         }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
