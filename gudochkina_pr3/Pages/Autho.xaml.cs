@@ -124,34 +124,49 @@ namespace gudochkina_pr3.Pages
         }
         private void SuccessfulLogin(Users user)
         {
-            MessageBox.Show("Вы вошли под: " + user.Roles.Name.ToString());
-            failedAttempts = 0;
-            Block.ClearBlockTime();
+            var twoFactorWindow = new TwoFactorWindow(user);
+            twoFactorWindow.Owner = Window.GetWindow(this);
+            twoFactorWindow.ShowDialog();
 
-            string surname = "";
-            string name = "";
-            string patronymic = "";
+            if (twoFactorWindow.IsAuthenticated)
+            {
+                MessageBox.Show("Вы успешно вошли в систему!", "Успех",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
 
-            if (user.Employees != null && user.Employees.Any())
-            {
-                var employee = user.Employees.First();
-                surname = employee.Surname ?? "";
-                name = employee.Name ?? "";
-                patronymic = employee.Patronymic ?? "";
-            }
-            else if (user.Clients != null && user.Clients.Any())
-            {
-                var client = user.Clients.First();
-                surname = client.Surname ?? "";
-                name = client.Name ?? "";
-                patronymic = client.Patronymic ?? "";
+                failedAttempts = 0;
+                Block.ClearBlockTime();
+
+                string surname = "";
+                string name = "";
+                string patronymic = "";
+
+                if (user.Employees != null && user.Employees.Any())
+                {
+                    var employee = user.Employees.First();
+                    surname = employee.Surname ?? "";
+                    name = employee.Name ?? "";
+                    patronymic = employee.Patronymic ?? "";
+                }
+                else if (user.Clients != null && user.Clients.Any())
+                {
+                    var client = user.Clients.First();
+                    surname = client.Surname ?? "";
+                    name = client.Name ?? "";
+                    patronymic = client.Patronymic ?? "";
+                }
+                else
+                {
+                    surname = user.Login;
+                    name = "";
+                }
+
+                LoadPage(user.Roles.Name.ToString(), user, surname, name, patronymic);
             }
             else
             {
-                surname = user.Login;
-                name = "";
+                MessageBox.Show("Двухфакторная аутентификация не пройдена", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            LoadPage(user.Roles.Name.ToString(), user, surname, name, patronymic);
         }
         private bool IsEmployeeRole(string roleName)
         {
@@ -267,6 +282,13 @@ namespace gudochkina_pr3.Pages
             click = 0;
             failedAttempts = 0;
             Block.ClearBlockTime();
+        }
+
+        private void btnForgotPassword_Click(object sender, RoutedEventArgs e)
+        {
+            var forgotPasswordWindow = new ForgotPasswordWindow();
+            forgotPasswordWindow.Owner = Window.GetWindow(this);
+            forgotPasswordWindow.ShowDialog();
         }
     }
 }

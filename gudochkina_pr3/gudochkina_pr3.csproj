@@ -52,6 +52,10 @@
       <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.ConfigurationManager, Version=10.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Configuration.ConfigurationManager.10.0.3\lib\net462\System.Configuration.ConfigurationManager.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Pipelines, Version=10.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -185,10 +189,20 @@
       <DependentUpon>EmployeesList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\EmployeeValidationModel.cs" />
+    <Compile Include="Pages\EmployeeValidator.cs" />
     <Compile Include="Pages\EmployeeViewModel.cs" />
+    <Compile Include="Pages\ForgotPasswordWindow.xaml.cs">
+      <DependentUpon>ForgotPasswordWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\TwoFactorWindow.xaml.cs">
+      <DependentUpon>TwoFactorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\AuthTempData.cs" />
     <Compile Include="Services\Block.cs" />
     <Compile Include="Services\CaptchaGenerator.cs" />
+    <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\Hash.cs" />
+    <Compile Include="Services\SmtpConfig.cs" />
     <Compile Include="Services\TimeHelper.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -215,6 +229,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\EmployeesList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ForgotPasswordWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TwoFactorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

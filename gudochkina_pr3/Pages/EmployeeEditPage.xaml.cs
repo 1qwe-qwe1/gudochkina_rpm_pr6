@@ -3,7 +3,6 @@ using gudochkina_pr3.Services;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -22,97 +21,6 @@ namespace gudochkina_pr3.Pages
     {
         public string PropertyName { get; set; }
         public string ErrorMessage { get; set; }
-    }
-
-    /// <summary>
-    /// Валидатор для сотрудника
-    /// </summary>
-    public class EmployeeValidator
-    {
-        public List<ValidationError> Validate(EmployeeValidationModel model, bool isNewEmployee, int? existingUserId = null)
-        {
-            var errors = new List<ValidationError>();
-            var validationContext = new ValidationContext(model);
-            var validationResults = new List<System.ComponentModel.DataAnnotations.ValidationResult>();
-
-            if (!Validator.TryValidateObject(model, validationContext, validationResults, true))
-            {
-                foreach (var validationResult in validationResults)
-                {
-                    foreach (var memberName in validationResult.MemberNames)
-                    {
-                        if (memberName == "Password" && !isNewEmployee)
-                            continue;
-
-                        errors.Add(new ValidationError
-                        {
-                            PropertyName = memberName,
-                            ErrorMessage = validationResult.ErrorMessage
-                        });
-                    }
-                }
-            }
-
-            if (isNewEmployee)
-            {
-                if (string.IsNullOrWhiteSpace(model.Password))
-                {
-                    errors.Add(new ValidationError
-                    {
-                        PropertyName = "Password",
-                        ErrorMessage = "Пароль обязателен для нового сотрудника"
-                    });
-                }
-                else if (model.Password.Length < 6)
-                {
-                    errors.Add(new ValidationError
-                    {
-                        PropertyName = "Password",
-                        ErrorMessage = "Пароль должен содержать минимум 6 символов"
-                    });
-                }
-            }
-
-            // Проверка уникальности логина
-            using (var db = new Entities1())
-            {
-                var existingUser = db.Users.FirstOrDefault(u => u.Login == model.Login);
-                if (existingUser != null)
-                {
-                    if (existingUserId.HasValue && existingUser.Id != existingUserId.Value)
-                    {
-                        errors.Add(new ValidationError
-                        {
-                            PropertyName = "Login",
-                            ErrorMessage = "Пользователь с таким логином уже существует"
-                        });
-                    }
-                    else if (!existingUserId.HasValue)
-                    {
-                        errors.Add(new ValidationError
-                        {
-                            PropertyName = "Login",
-                            ErrorMessage = "Пользователь с таким логином уже существует"
-                        });
-                    }
-                }
-            }
-
-            if (!string.IsNullOrWhiteSpace(model.PhoneNumber))
-            {
-                var phoneDigits = new string(model.PhoneNumber.Where(char.IsDigit).ToArray());
-                if (phoneDigits.Length < 10)
-                {
-                    errors.Add(new ValidationError
-                    {
-                        PropertyName = "PhoneNumber",
-                        ErrorMessage = "Номер телефона должен содержать минимум 10 цифр"
-                    });
-                }
-            }
-
-            return errors;
-        }
     }
 
     /// <summary>
@@ -326,8 +234,8 @@ namespace gudochkina_pr3.Pages
                 using (var db = new Entities1())
                 {
                     var employee = db.Employees
+                        .Include("Users")
                         .Include("Users.Roles")
-                        .Include("Users.PhoneNumber")
                         .Include("Posts")
                         .FirstOrDefault(e => e.EmployeeId == _employeeId);
 
@@ -336,7 +244,8 @@ namespace gudochkina_pr3.Pages
                         txtSurname.Text = employee.Surname;
                         txtName.Text = employee.Name;
                         txtPatronymic.Text = employee.Patronymic;
-                        txtPhoneNumber.Text = employee.Users.PhoneNumber;
+                        txtPhoneNumber.Text = employee.Users?.PhoneNumber ?? "";
+
                         txtLogin.Text = employee.Users?.Login;
 
                         bool isActive = employee.IsActive.GetValueOrDefault();
@@ -535,6 +444,8 @@ namespace gudochkina_pr3.Pages
                         var user = new Users
                         {
                             Login = txtLogin.Text,
+                           // Email = txtEmail.Text.Trim(),          
+                            PhoneNumber = txtPhoneNumber.Text.Trim(),
                             PasswordHash = Hash.HashPassword(txtPassword.Password),
                             RoleID = (int)cmbRole.SelectedValue
                         };
@@ -564,7 +475,7 @@ namespace gudochkina_pr3.Pages
             employee.Surname = txtSurname.Text.Trim();
             employee.Name = txtName.Text.Trim();
             employee.Patronymic = txtPatronymic.Text?.Trim();
-            employee.Users.PhoneNumber = txtPhoneNumber.Text.Trim();
+          //  employee.Users.PhoneNumber = txtPhoneNumber.Text.Trim();
             employee.IsActive = cmbStatus.SelectedItem.ToString() == "Активен";
             employee.HireDate = DateTime.Now;
           //  employee.Photo = _photoBytes;
@@ -577,6 +488,7 @@ namespace gudochkina_pr3.Pages
             if (employee.Users != null && !string.IsNullOrEmpty(txtLogin.Text))
             {
                 employee.Users.Login = txtLogin.Text.Trim();
+                employee.Users.PhoneNumber = txtPhoneNumber.Text.Trim();
 
                 if (!string.IsNullOrEmpty(txtPassword.Password))
                 {
