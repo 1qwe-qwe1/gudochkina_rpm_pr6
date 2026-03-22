@@ -12,6 +12,7 @@ namespace gudochkina_pr3.Services
     {
         private static readonly string BlockFilePath = "block_time.json";
 
+        // Получаем время окончания блокировки, если активна
         public static DateTime? GetBlockEndTime()
         {
             try
@@ -39,6 +40,7 @@ namespace gudochkina_pr3.Services
             return null;
         }
 
+        // Установливаем время окончания блокировки
         public static void SetBlockEndTime(DateTime blockEndTime)
         {
             try

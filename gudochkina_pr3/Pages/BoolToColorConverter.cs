@@ -8,7 +8,7 @@ namespace gudochkina_pr3.Pages
 {
 public partial class EmployeeEditPage
     {
-        public class BoolToColorConverter : IValueConverter
+       /* public class BoolToColorConverter : IValueConverter
         {
             public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             {
@@ -23,6 +23,6 @@ public partial class EmployeeEditPage
             {
                 throw new NotImplementedException();
             }
-        }
+        } */
     }
 }

@@ -42,13 +42,12 @@ namespace gudochkina_pr3.Pages
 
             UpdateGreetingText();
 
-            if (_role.ToLower() == "администратор" || _role.ToLower() == "administrator")
+            if (_role.ToLower() == "администратор")
             {
                 adminMenuPanel.Visibility = Visibility.Visible;
             }
 
-            if (!string.IsNullOrEmpty(role) &&
-        (role.ToLower() == "сотрудник" || role.ToLower() == "employee"))
+            if (!string.IsNullOrEmpty(role) && (role.ToLower() == "сотрудник"))
             {
                 StartWorkingHoursCheck();
             }
@@ -83,14 +82,15 @@ namespace gudochkina_pr3.Pages
         }
 
         
-        private void Client_Unloaded(object sender, RoutedEventArgs e)
+       /* private void Client_Unloaded(object sender, RoutedEventArgs e)
         {
             if (_workTimer != null)
             {
                 _workTimer.Stop();
                 _workTimer = null;
             }
-        }
+        }*/
+
         private void btnEmployees_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new EmployeesList());

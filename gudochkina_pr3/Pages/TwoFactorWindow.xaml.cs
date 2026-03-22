@@ -26,6 +26,7 @@ namespace gudochkina_pr3.Pages
         private string _userEmail;
         private string _generatedCode;
 
+        // SMTP настройки
         private const string SMTP_SERVER = "smtp.gmail.com";
         private const int SMTP_PORT = 587;
         private const string SMTP_USERNAME = "dfdsfsfs096@gmail.com";
@@ -55,6 +56,7 @@ namespace gudochkina_pr3.Pages
             );
         }
 
+        // Получает email пользователя из объекта Users
         private void GetUserEmail()
         {
             if (_user == null || string.IsNullOrEmpty(_user.Email))
@@ -70,6 +72,7 @@ namespace gudochkina_pr3.Pages
             txtEmailInfo.Text = $"Код отправлен на {_userEmail}";
         }
 
+        // Отправка кода подтверждения на email пользователя
         private async void SendVerificationCode()
         {
             try
@@ -92,6 +95,7 @@ namespace gudochkina_pr3.Pages
             }
         }
 
+        // Повторная отправка кода
         private async void btnResend_Click(object sender, RoutedEventArgs e)
         {
             btnResend.IsEnabled = false;
@@ -102,6 +106,7 @@ namespace gudochkina_pr3.Pages
             txtError.Visibility = Visibility.Collapsed;
         }
 
+        // Проверка введенного кода
         private void btnVerify_Click(object sender, RoutedEventArgs e)
         {
             string code = txtCode.Text.Trim();

@@ -265,7 +265,6 @@ namespace gudochkina_pr3.Pages
             tblCaptcha.TextDecorations = TextDecorations.Strikethrough;
         }
         private void LoadPage(string _role, Users user, string surname, string name, string patronymic)
-
         {
             click = 0;
 

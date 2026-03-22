@@ -19,7 +19,7 @@ namespace gudochkina_pr3.Pages
     /// </summary>
     public class ValidationError
     {
-        public string PropertyName { get; set; }
+        public string PropertyName { get; set; } // Название поля, в котором ошибка
         public string ErrorMessage { get; set; }
     }
 
@@ -32,7 +32,7 @@ namespace gudochkina_pr3.Pages
         private byte[] _photoBytes;
         private EmployeeValidator _validator;
 
-        private Dictionary<string, FrameworkElement> _validationControls;
+        private Dictionary<string, FrameworkElement> _validationControls; // Связка "название поля -> UI элемент"
 
         public EmployeeEditPage()
         {
@@ -56,6 +56,7 @@ namespace gudochkina_pr3.Pages
             txtPassword.Tag = "optional";
         }
 
+        // Инициализация словаря для связи полей модели с UI элементами
         private void InitializeValidationControls()
         {
             _validationControls = new Dictionary<string, FrameworkElement>
@@ -64,6 +65,7 @@ namespace gudochkina_pr3.Pages
                 { "Name", txtName },
                 { "Patronymic", txtPatronymic },
                 { "PhoneNumber", txtPhoneNumber },
+                { "Email", txtEmail },
                 { "Login", txtLogin },
                 { "Password", txtPassword },
                 { "Status", cmbStatus },
@@ -76,10 +78,12 @@ namespace gudochkina_pr3.Pages
 
         private void SetupRealTimeValidation()
         {
+            // При изменении текста в поле, проверяем его
             txtSurname.TextChanged += (s, e) => ValidateField("Surname", txtSurname.Text);
             txtName.TextChanged += (s, e) => ValidateField("Name", txtName.Text);
             txtPatronymic.TextChanged += (s, e) => ValidateField("Patronymic", txtPatronymic.Text);
             txtPhoneNumber.TextChanged += (s, e) => ValidateField("PhoneNumber", txtPhoneNumber.Text);
+            txtEmail.TextChanged += (s, e) => ValidateField("Email", txtEmail.Text);
             txtLogin.TextChanged += (s, e) => ValidateField("Login", txtLogin.Text);
             txtPassword.PasswordChanged += (s, e) => ValidateField("Password", txtPassword.Password);
             cmbStatus.SelectionChanged += (s, e) => ValidateField("Status", cmbStatus.SelectedItem?.ToString());
@@ -87,6 +91,7 @@ namespace gudochkina_pr3.Pages
             cmbRole.SelectionChanged += (s, e) => ValidateField("RoleId", cmbRole.SelectedValue);
         }
 
+        // Валидация конкретного поля
         private void ValidateField(string propertyName, object value)
         {
             var model = CreateValidationModel();
@@ -105,12 +110,14 @@ namespace gudochkina_pr3.Pages
                 }
             }
 
+            // Валидируем модель, получаем список ошибок
             var errors = _validator.Validate(model, !_employeeId.HasValue, existingUserId);
             var fieldErrors = errors.Where(e => e.PropertyName == propertyName).ToList();
 
             ShowFieldErrors(propertyName, fieldErrors);
         }
 
+        // Отображение ошибок валидации для конкретного поля
         private void ShowFieldErrors(string propertyName, List<ValidationError> errors)
         {
             if (_validationControls.TryGetValue(propertyName, out var control))
@@ -176,6 +183,7 @@ namespace gudochkina_pr3.Pages
                 PhoneNumber = txtPhoneNumber.Text,
                 Login = txtLogin.Text,
                 Password = txtPassword.Password,
+                Email = txtEmail.Text,
                 Status = cmbStatus.SelectedItem?.ToString(),
                 PostId = cmbPost.SelectedValue as int?,
                 RoleId = cmbRole.SelectedValue as int?,
@@ -183,13 +191,16 @@ namespace gudochkina_pr3.Pages
             };
         }
 
+        // Устанавливаем значение свойства в модель через рефлексию
         private void SetPropertyValue(EmployeeValidationModel model, string propertyName, object value)
         {
+           // Получаем информацию о свойстве по его имени
             var property = typeof(EmployeeValidationModel).GetProperty(propertyName);
             if (property != null)
             {
                 try
                 {
+                    // Преобразуем значение к нужному типу
                     property.SetValue(model, Convert.ChangeType(value, property.PropertyType));
                 }
                 catch
@@ -245,7 +256,7 @@ namespace gudochkina_pr3.Pages
                         txtName.Text = employee.Name;
                         txtPatronymic.Text = employee.Patronymic;
                         txtPhoneNumber.Text = employee.Users?.PhoneNumber ?? "";
-
+                        txtEmail.Text = employee.Users?.Email ?? "";
                         txtLogin.Text = employee.Users?.Login;
 
                         bool isActive = employee.IsActive.GetValueOrDefault();
@@ -277,6 +288,7 @@ namespace gudochkina_pr3.Pages
             }
         }
 
+        // Загрузка изображения из байтов для отображения
         private void LoadImageFromBytes(byte[] imageData)
         {
             try
@@ -347,6 +359,7 @@ namespace gudochkina_pr3.Pages
                 }
             }
 
+            // Выполняем полную валидацию
             var errors = _validator.Validate(model, !_employeeId.HasValue, existingUserId);
 
             if (errors.Any())
@@ -444,7 +457,7 @@ namespace gudochkina_pr3.Pages
                         var user = new Users
                         {
                             Login = txtLogin.Text,
-                           // Email = txtEmail.Text.Trim(),          
+                            Email = txtEmail.Text.Trim(),          
                             PhoneNumber = txtPhoneNumber.Text.Trim(),
                             PasswordHash = Hash.HashPassword(txtPassword.Password),
                             RoleID = (int)cmbRole.SelectedValue
@@ -488,6 +501,7 @@ namespace gudochkina_pr3.Pages
             if (employee.Users != null && !string.IsNullOrEmpty(txtLogin.Text))
             {
                 employee.Users.Login = txtLogin.Text.Trim();
+                employee.Users.Email = txtEmail.Text.Trim();
                 employee.Users.PhoneNumber = txtPhoneNumber.Text.Trim();
 
                 if (!string.IsNullOrEmpty(txtPassword.Password))
@@ -510,6 +524,7 @@ namespace gudochkina_pr3.Pages
             txtName.Clear();
             txtPatronymic.Clear();
             txtPhoneNumber.Clear();
+            txtEmail.Clear();
             txtLogin.Clear();
             txtPassword.Clear();
             cmbStatus.SelectedIndex = 0;

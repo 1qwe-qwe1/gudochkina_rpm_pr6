@@ -26,6 +26,7 @@ namespace gudochkina_pr3.Pages
         private int? _userId;
         private string _generatedCode;
 
+        // Настройки SMTP
         private const string SMTP_SERVER = "smtp.gmail.com";
         private const int SMTP_PORT = 587;
         private const string SMTP_USERNAME = "dfdsfsfs096@gmail.com";
@@ -75,6 +76,7 @@ namespace gudochkina_pr3.Pages
 
                 _generatedCode = EmailService.GenerateVerificationCode();
 
+                // Сохраняем код во временное хранилище
                 AuthTempData.SaveVerificationCode(email, _generatedCode, _userId.Value);
 
                 string body = EmailService.CreatePasswordResetEmailBody(_generatedCode);
@@ -93,6 +95,7 @@ namespace gudochkina_pr3.Pages
             }
         }
 
+        // Проверка кода подтверждения
         private void btnVerifyCode_Click(object sender, RoutedEventArgs e)
         {
             string code = txtCode.Text.Trim();
@@ -103,6 +106,7 @@ namespace gudochkina_pr3.Pages
                 return;
             }
 
+            // Проверяем код во временном хранилище
             if (AuthTempData.VerifyCode(_userEmail, code, out int? userId))
             {
                 _userId = userId;
@@ -117,6 +121,7 @@ namespace gudochkina_pr3.Pages
             }
         }
 
+        // Повторная отправка кода
         private async void btnResendCode_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(_userEmail))
@@ -143,6 +148,7 @@ namespace gudochkina_pr3.Pages
             }
         }
 
+        // Установка нового пароля
         private void btnSavePassword_Click(object sender, RoutedEventArgs e)
         {
             string newPassword = txtNewPassword.Password;

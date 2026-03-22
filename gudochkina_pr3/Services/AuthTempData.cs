@@ -23,6 +23,7 @@ namespace gudochkina_pr3.Services
 
             RemoveExpiredCodes();
 
+            // Сохраняет данные в словарь по ключу email
             _tempData[email] = data;
         }
 

@@ -31,18 +31,18 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Фото слева -->
+                    <!-- Фото -->
                     <StackPanel Grid.Column="0" Width="180" Margin="0,0,20,0">
                         <Border BorderBrush="LightGray" 
-                                BorderThickness="1" 
-                                Background="White"
-                                Width="150" 
-                                Height="150"
-                                HorizontalAlignment="Center">
+                    BorderThickness="1" 
+                    Background="White"
+                    Width="150" 
+                    Height="150"
+                    HorizontalAlignment="Center">
                             <Image x:Name="imgPhoto" 
-                                   Stretch="Uniform"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center">
+                       Stretch="Uniform"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center">
                                 <Image.Style>
                                     <Style TargetType="Image">
                                         <Setter Property="Source" Value="/Resources/default-avatar.png"/>
@@ -52,17 +52,18 @@
                         </Border>
 
                         <Button x:Name="btnAddPhoto" 
-                                Content="Добавить фото" 
-                                Click="btnAddPhoto_Click"
-                                Margin="0,10,0,0"
-                                Width="150"
-                                Padding="8,5"
-                                HorizontalAlignment="Center"/>
+                    Content="Добавить фото" 
+                    Click="btnAddPhoto_Click"
+                    Margin="0,10,0,0"
+                    Width="150"
+                    Padding="8,5"
+                    HorizontalAlignment="Center"/>
                     </StackPanel>
 
-                    <!-- Поля справа -->
+                    <!-- Поля -->
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -83,135 +84,167 @@
 
                         <!-- Фамилия -->
                         <TextBlock Grid.Row="0" Grid.Column="0" 
-                                   Text="Фамилия:" 
-                                   Margin="0,0,10,10"
-                                   VerticalAlignment="Center"/>
+                       Text="Фамилия:" 
+                       Margin="0,0,10,10"
+                       VerticalAlignment="Center"
+                       FontSize="14"/>
                         <TextBox Grid.Row="0" Grid.Column="1" 
-                                 x:Name="txtSurname" 
-                                 Margin="0,0,0,10"
-                                 Height="28"
-                                 Padding="5"
-                                 FontSize="12"/>
+                     x:Name="txtSurname" 
+                     Margin="0,0,0,10"
+                     Height="32"
+                     Padding="8,5"
+                     FontSize="14"
+                     VerticalContentAlignment="Center"/>
 
                         <!-- Имя -->
                         <TextBlock Grid.Row="1" Grid.Column="0" 
-                                   Text="Имя:" 
-                                   Margin="0,0,10,10"
-                                   VerticalAlignment="Center"/>
+                       Text="Имя:" 
+                       Margin="0,0,10,10"
+                       VerticalAlignment="Center"
+                       FontSize="14"/>
                         <TextBox Grid.Row="1" Grid.Column="1" 
-                                 x:Name="txtName" 
-                                 Margin="0,0,0,10"
-                                 Height="28"
-                                 Padding="5"
-                                 FontSize="14"/>
+                     x:Name="txtName" 
+                     Margin="0,0,0,10"
+                     Height="32"
+                     Padding="8,5"
+                     FontSize="14"
+                     VerticalContentAlignment="Center"/>
 
                         <!-- Отчество -->
                         <TextBlock Grid.Row="2" Grid.Column="0" 
-                                   Text="Отчество:" 
-                                   Margin="0,0,10,10"
-                                   VerticalAlignment="Center"
-                                   Foreground="#666666">
+                       Text="Отчество:" 
+                       Margin="0,0,10,10"
+                       VerticalAlignment="Center"
+                       Foreground="#666666"
+                       FontSize="14">
                             <TextBlock.ToolTip>
                                 <TextBlock Text="Не обязательное поле" Foreground="Gray"/>
                             </TextBlock.ToolTip>
-                        </TextBlock>
+            </TextBlock>
                         <TextBox Grid.Row="2" Grid.Column="1" 
-                                 x:Name="txtPatronymic" 
-                                 Margin="0,0,0,10"
-                                 Height="28"
-                                 Padding="5"
-                                 FontSize="14"/>
+                     x:Name="txtPatronymic" 
+                     Margin="0,0,0,10"
+                     Height="32"
+                     Padding="8,5"
+                     FontSize="14"
+                     VerticalContentAlignment="Center"/>
 
                         <!-- Телефон -->
                         <TextBlock Grid.Row="3" Grid.Column="0" 
-                                   Text="Телефон:" 
-                                   Margin="0,0,10,10"
-                                   VerticalAlignment="Center"/>
+                       Text="Телефон:" 
+                       Margin="0,0,10,10"
+                       VerticalAlignment="Center"
+                       FontSize="14"/>
                         <TextBox Grid.Row="3" Grid.Column="1" 
-                                 x:Name="txtPhoneNumber" 
+                     x:Name="txtPhoneNumber" 
+                     Margin="0,0,0,10"
+                     Height="32"
+                     Padding="8,5"
+                     FontSize="14"
+                     VerticalContentAlignment="Center"/>
+
+                        <!-- Email -->
+                        <TextBlock Grid.Row="4" Grid.Column="0" 
+                                   Text="Email:" 
+                                   Margin="0,0,10,10"
+                                   VerticalAlignment="Center"
+                                   FontSize="14"/>
+                        <TextBox Grid.Row="4" Grid.Column="1" 
+                                 x:Name="txtEmail" 
                                  Margin="0,0,0,10"
-                                 Height="28"
-                                 Padding="5"
-                                 FontSize="14"/>
+                                 Height="32"
+                                 Padding="8,5"
+                                 FontSize="14"
+                                 VerticalContentAlignment="Center"/>
+
 
                         <!-- Статус -->
-                        <TextBlock Grid.Row="4" Grid.Column="0" 
-                                   Text="Статус:" 
-                                   Margin="0,0,10,10"
-                                   VerticalAlignment="Center"/>
-                        <ComboBox Grid.Row="4" Grid.Column="1" 
-                                  x:Name="cmbStatus" 
-                                  Margin="0,0,0,10"
-                                  Height="28"
-                                  Padding="5"
-                                  FontSize="14">
+                        <TextBlock Grid.Row="5" Grid.Column="0" 
+                       Text="Статус:" 
+                       Margin="0,0,10,10"
+                       VerticalAlignment="Center"
+                       FontSize="14"/>
+                        <ComboBox Grid.Row="5" Grid.Column="1" 
+                      x:Name="cmbStatus" 
+                      Margin="0,0,0,10"
+                      Height="38"
+                      Padding="8,5"
+                      FontSize="14"
+                      VerticalContentAlignment="Center">
                             <ComboBox.ItemContainerStyle>
                                 <Style TargetType="ComboBoxItem">
-                                    <Setter Property="Padding" Value="5"/>
+                                    <Setter Property="Padding" Value="8,5"/>
                                     <Setter Property="FontSize" Value="14"/>
                                 </Style>
                             </ComboBox.ItemContainerStyle>
                         </ComboBox>
 
                         <!-- Должность -->
-                        <TextBlock Grid.Row="5" Grid.Column="0" 
-                                   Text="Должность:" 
-                                   Margin="0,0,10,10"
-                                   VerticalAlignment="Center"/>
-                        <ComboBox Grid.Row="5" Grid.Column="1" 
-                                  x:Name="cmbPost" 
-                                  Margin="0,0,0,10"
-                                  Height="28"
-                                  Padding="5"
-                                  FontSize="14"
-                                  DisplayMemberPath="PostName"
-                                  SelectedValuePath="PostId">
+                        <TextBlock Grid.Row="6" Grid.Column="0" 
+                       Text="Должность:" 
+                       Margin="0,0,10,10"
+                       VerticalAlignment="Center"
+                       FontSize="14"/>
+                        <ComboBox Grid.Row="6" Grid.Column="1" 
+                      x:Name="cmbPost" 
+                      Margin="0,0,0,10"
+                      Height="38"
+                      Padding="8,5"
+                      FontSize="14"
+                      VerticalContentAlignment="Center"
+                      DisplayMemberPath="PostName"
+                      SelectedValuePath="PostId">
                             <ComboBox.ItemContainerStyle>
                                 <Style TargetType="ComboBoxItem">
-                                    <Setter Property="Padding" Value="5"/>
+                                    <Setter Property="Padding" Value="8,5"/>
                                     <Setter Property="FontSize" Value="14"/>
                                 </Style>
                             </ComboBox.ItemContainerStyle>
                         </ComboBox>
 
                         <!-- Роль -->
-                        <TextBlock Grid.Row="6" Grid.Column="0" 
-                                   Text="Роль:" 
-                                   Margin="0,0,10,10"
-                                   VerticalAlignment="Center"/>
-                        <ComboBox Grid.Row="6" Grid.Column="1" 
-                                  x:Name="cmbRole" 
-                                  Margin="0,0,0,10"
-                                  Height="28"
-                                  Padding="5"
-                                  FontSize="14"
-                                  DisplayMemberPath="Name"
-                                  SelectedValuePath="RoleID">
+                        <TextBlock Grid.Row="7" Grid.Column="0" 
+                       Text="Роль:" 
+                       Margin="0,0,10,10"
+                       VerticalAlignment="Center"
+                       FontSize="14"/>
+                        <ComboBox Grid.Row="7" Grid.Column="1" 
+                      x:Name="cmbRole" 
+                      Margin="0,0,0,10"
+                      Height="38"
+                      Padding="8,5"
+                      FontSize="14"
+                      VerticalContentAlignment="Center"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="RoleID">
                             <ComboBox.ItemContainerStyle>
                                 <Style TargetType="ComboBoxItem">
-                                    <Setter Property="Padding" Value="5"/>
+                                    <Setter Property="Padding" Value="8,5"/>
                                     <Setter Property="FontSize" Value="14"/>
                                 </Style>
                             </ComboBox.ItemContainerStyle>
                         </ComboBox>
 
                         <!-- Логин -->
-                        <TextBlock Grid.Row="7" Grid.Column="0" 
-                                   Text="Логин:" 
-                                   Margin="0,0,10,10"
-                                   VerticalAlignment="Center"/>
-                        <TextBox Grid.Row="7" Grid.Column="1" 
-                                 x:Name="txtLogin" 
-                                 Margin="0,0,0,10"
-                                 Height="28"
-                                 Padding="5"
-                                 FontSize="14"/>
+                        <TextBlock Grid.Row="8" Grid.Column="0" 
+                       Text="Логин:" 
+                       Margin="0,0,10,10"
+                       VerticalAlignment="Center"
+                       FontSize="14"/>
+                        <TextBox Grid.Row="8" Grid.Column="1" 
+                     x:Name="txtLogin" 
+                     Margin="0,0,0,10"
+                     Height="32"
+                     Padding="8,5"
+                     FontSize="14"
+                     VerticalContentAlignment="Center"/>
 
                         <!-- Пароль -->
-                        <TextBlock Grid.Row="8" Grid.Column="0" 
-                                   Text="Пароль:" 
-                                   Margin="0,0,10,10"
-                                   VerticalAlignment="Center">
+                        <TextBlock Grid.Row="9" Grid.Column="0" 
+                       Text="Пароль:" 
+                       Margin="0,0,10,10"
+                       VerticalAlignment="Center"
+                       FontSize="14">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -223,13 +256,14 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
-                        <PasswordBox Grid.Row="8" Grid.Column="1" 
-             x:Name="txtPassword" 
-             Margin="0,0,0,10"
-             Height="28"
-             Padding="5"
-             FontSize="14"
-             Visibility="Collapsed">
+                        <PasswordBox Grid.Row="9" Grid.Column="1" 
+                         x:Name="txtPassword" 
+                         Margin="0,0,0,10"
+                         Height="32"
+                         Padding="8,5"
+                         FontSize="14"
+                         VerticalContentAlignment="Center"
+                         Visibility="Collapsed">
                             <PasswordBox.Style>
                                 <Style TargetType="PasswordBox">
                                     <Setter Property="Visibility" Value="Collapsed"/>

@@ -29,10 +29,12 @@ namespace gudochkina_pr3.Services
             _fromName = fromName;
         }
 
+        // Отправка email
         public async Task<bool> SendEmailAsync(string toEmail, string subject, string body)
         {
             try
             {
+                // Создаем SMTP клиент с указанными сервером и портом
                 using (var client = new SmtpClient(_smtpServer, _smtpPort))
                 {
                     client.UseDefaultCredentials = false;

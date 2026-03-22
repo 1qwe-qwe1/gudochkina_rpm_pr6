@@ -26,6 +26,10 @@ namespace gudochkina_pr3.Pages
         [StringLength(20, MinimumLength = 5, ErrorMessage = "Телефон должен содержать от 5 до 20 символов")]
         public string PhoneNumber { get; set; }
 
+        [Required(ErrorMessage = "Email обязателен для заполнения")]
+        [EmailAddress(ErrorMessage = "Введите корректный email адрес")]
+        public string Email { get; set; }
+
         [Required(ErrorMessage = "Логин обязателен для заполнения")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Логин должен содержать от 3 до 50 символов")]
         [RegularExpression(@"^[a-zA-Z0-9_]+$", ErrorMessage = "Логин может содержать только латинские буквы, цифры и подчеркивание")]
