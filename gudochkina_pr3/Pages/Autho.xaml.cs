@@ -124,12 +124,12 @@ namespace gudochkina_pr3.Pages
         }
         private void SuccessfulLogin(Users user)
         {
-            var twoFactorWindow = new TwoFactorWindow(user);
+            /*var twoFactorWindow = new TwoFactorWindow(user);
             twoFactorWindow.Owner = Window.GetWindow(this);
             twoFactorWindow.ShowDialog();
 
             if (twoFactorWindow.IsAuthenticated)
-            {
+            {*/
                 MessageBox.Show("Вы успешно вошли в систему!", "Успех",
                     MessageBoxButton.OK, MessageBoxImage.Information);
 
@@ -161,12 +161,12 @@ namespace gudochkina_pr3.Pages
                 }
 
                 LoadPage(user.Roles.Name.ToString(), user, surname, name, patronymic);
-            }
+            /*}
             else
             {
                 MessageBox.Show("Двухфакторная аутентификация не пройдена", "Ошибка",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+            }*/
         }
         private bool IsEmployeeRole(string roleName)
         {

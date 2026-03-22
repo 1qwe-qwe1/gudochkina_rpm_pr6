@@ -95,5 +95,10 @@ namespace gudochkina_pr3.Pages
         {
             NavigationService.Navigate(new EmployeesList());
         }
+
+        private void btnRecyclingActs_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new RecyclingActsList());
+        }
     }
 }
