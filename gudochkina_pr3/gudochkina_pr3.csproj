@@ -197,6 +197,9 @@
     <Compile Include="Pages\ForgotPasswordWindow.xaml.cs">
       <DependentUpon>ForgotPasswordWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\RecyclingActPage.xaml.cs">
+      <DependentUpon>RecyclingActPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\RecyclingActsList.xaml.cs">
       <DependentUpon>RecyclingActsList.xaml</DependentUpon>
     </Compile>
@@ -239,6 +242,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ForgotPasswordWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\RecyclingActPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

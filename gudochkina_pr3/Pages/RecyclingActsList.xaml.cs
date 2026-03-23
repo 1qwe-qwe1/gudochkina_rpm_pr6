@@ -50,7 +50,7 @@ namespace gudochkina_pr3.Pages
                                    ActId = act.ActId,
                                    ContractId = act.ContractId,
                                    ContractNumber = contract.ContractNumber,
-                                   //ActDate = act.ActDate ?? DateTime.Now,
+                                   ActDate = act.ActDate,
                                    WasteTypeId = act.WasteTypeId,
                                    WasteTypeName = wasteType.WasteTypeName,
                                    Volume = act.Volume,
@@ -75,7 +75,7 @@ namespace gudochkina_pr3.Pages
         {
             if (lvActs.SelectedItem is ActViewModel selectedAct)
             {
-             //   NavigationService.Navigate(new RecyclingActPrintPage(selectedAct.ActId));
+                NavigationService.Navigate(new RecyclingActPage(selectedAct.ActId));
             }
         }
     }

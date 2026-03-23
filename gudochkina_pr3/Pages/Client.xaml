@@ -26,7 +26,7 @@
                     <Button x:Name="btnEmployees" Content="Сотрудники" 
                     Click="btnEmployees_Click" Margin="0,0,10,10" Padding="10,5"/>
                     <Button x:Name="btnRecyclingActs" Content="Акты переработки" 
-                            Click="btnRecyclingActs_Click" Margin="0,0,10,10" Padding="10,5"/>
+                            Click="btnRecyclingActs_Click" Margin="0,0,10,10" Padding="10,5" Width="160"/>
                 </WrapPanel>
             </StackPanel>
 
