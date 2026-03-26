@@ -244,36 +244,16 @@
                        Text="Пароль:" 
                        Margin="0,0,10,10"
                        VerticalAlignment="Center"
-                       FontSize="14">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ElementName=tbTitle, Path=Text}" Value="Добавление сотрудника">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
+                       FontSize="14"
+                         x:Name="lblPassword"/>
+
                         <PasswordBox Grid.Row="9" Grid.Column="1" 
                          x:Name="txtPassword" 
                          Margin="0,0,0,10"
                          Height="32"
                          Padding="8,5"
                          FontSize="14"
-                         VerticalContentAlignment="Center"
-                         Visibility="Collapsed">
-                            <PasswordBox.Style>
-                                <Style TargetType="PasswordBox">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding ElementName=tbTitle, Path=Text}" Value="Добавление сотрудника">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </PasswordBox.Style>
+                         VerticalContentAlignment="Center">
                         </PasswordBox>
                     </Grid>
                 </Grid>
@@ -288,6 +268,14 @@
                             Margin="0,0,10,0" 
                             Padding="15,8"
                             MinWidth="100"
+                            MinHeight="50"
+                            FontSize="14"/>
+                    <Button x:Name="btnEmploymentContract" 
+                            Content="Трудовой договор" 
+                            Click="btnEmploymentContract_Click" 
+                            Margin="10,0,0,0" 
+                            Padding="15,8"
+                            MinWidth="120"
                             MinHeight="50"
                             FontSize="14"/>
                 </StackPanel>

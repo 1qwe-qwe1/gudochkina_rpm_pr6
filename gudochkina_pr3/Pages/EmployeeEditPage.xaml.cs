@@ -41,6 +41,9 @@ namespace gudochkina_pr3.Pages
             InitializeValidationControls();
             LoadComboBoxData();
             tbTitle.Text = "Добавление сотрудника";
+
+            lblPassword.Visibility = Visibility.Visible;
+            txtPassword.Visibility = Visibility.Visible;
         }
 
         public EmployeeEditPage(int employeeId)
@@ -54,6 +57,9 @@ namespace gudochkina_pr3.Pages
             tbTitle.Text = "Редактирование сотрудника";
 
             txtPassword.Tag = "optional";
+
+            lblPassword.Visibility = Visibility.Collapsed;
+            txtPassword.Visibility = Visibility.Collapsed;
         }
 
         // Инициализация словаря для связи полей модели с UI элементами
@@ -601,6 +607,58 @@ namespace gudochkina_pr3.Pages
                     e.Handled = true;
                     return;
                 }
+            }
+        }
+
+        private void btnEmploymentContract_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                int? employeeId = _employeeId;
+
+                if (!employeeId.HasValue)
+                {
+                    var result = MessageBox.Show("Сначала необходимо сохранить данные сотрудника.\nСохранить сейчас?",
+                        "Сохранение", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        btnSave_Click(sender, e);
+
+                        MessageBox.Show("После сохранения сотрудника откройте его снова для создания договора.",
+                            "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                        return;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
+                // Получаем данные сотрудника из БД
+                using (var db = new Entities1())
+                {
+                    var employee = db.Employees
+                        .Include("Posts")
+                        .Include("Users")
+                        .FirstOrDefault(emp => emp.EmployeeId == employeeId);
+
+                    if (employee != null)
+                    {
+                        EmploymentContractWindow contractWindow = new EmploymentContractWindow(employee);
+                        bool? result = contractWindow.ShowDialog();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Сотрудник не найден в базе данных.", "Ошибка",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии формы договора: {ex.Message}", "Ошибка",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
